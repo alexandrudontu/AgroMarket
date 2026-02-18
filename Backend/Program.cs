@@ -1,3 +1,6 @@
+using Backend.Data;
+using Microsoft.EntityFrameworkCore;
+
 namespace Backend
 {
     public class Program
@@ -9,6 +12,10 @@ namespace Backend
             // Add services to the container.
 
             builder.Services.AddControllers();
+
+            builder.Services.AddDbContext<ApplicationDbContext>(options =>
+                options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+
 
             var app = builder.Build();
 
