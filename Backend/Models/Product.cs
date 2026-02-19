@@ -23,13 +23,19 @@ namespace Backend.Models
         [Required]
         public int Quantity { get; set; }
 
-        [Required]
-        public string Category { get; set; }  // Vegetables, Fruits, Dairy etc.
+        // Foreign key to Category
+        public int CategoryId { get; set; }
+
+        // Navigation property
+        public Category Category { get; set; }  
 
         // Foreign key to User (Farmer)
         public int FarmerId { get; set; }
 
         // Navigation property
         public User Farmer { get; set; }
+
+        // Navigation property
+        public ICollection<OrderItem> ? OrderItems { get; set; }
     }
 }
