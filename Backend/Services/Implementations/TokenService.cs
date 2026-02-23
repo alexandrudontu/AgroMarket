@@ -4,7 +4,7 @@ using System.Security.Claims;
 using System.Text;
 using Backend.Models;
 
-namespace Backend.Services
+namespace Backend.Services.Implementations
 {
     public class TokenService
     {

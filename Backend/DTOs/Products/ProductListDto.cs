@@ -7,6 +7,8 @@
         public decimal Price { get; set; }
         public string UnitOfMeasurement { get; set; }  
         public string CategoryName { get; set; }
+
+        public string FarmerName { get; set; }
         public string MainImageUrl { get; set; }
     }
 }

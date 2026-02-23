@@ -37,5 +37,8 @@ namespace Backend.Models
 
         // Navigation property
         public ICollection<OrderItem> ? OrderItems { get; set; }
+
+        // Navigation property for product images
+        public ICollection<ProductImages> ? Images { get; set; }
     }
 }

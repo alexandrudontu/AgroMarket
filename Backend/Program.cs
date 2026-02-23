@@ -3,7 +3,8 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
-using Backend.Services;
+using Backend.Services.Implementations;
+using Backend.Services.Interfaces;
 
 
 namespace Backend
@@ -22,6 +23,8 @@ namespace Backend
                 options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
             builder.Services.AddScoped<TokenService>();
+            builder.Services.AddScoped<ICategoryService, CategoryService>();
+            builder.Services.AddScoped<IProductService, ProductService>();
 
             var key = Encoding.UTF8.GetBytes(builder.Configuration["JwtSettings:Key"]);
 

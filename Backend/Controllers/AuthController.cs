@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using Backend.Data;
 using Backend.DTOs;
 using Backend.Models;
-using Backend.Services;
+using Backend.Services.Implementations;
 
 namespace Backend.Controllers
 {
