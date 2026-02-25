@@ -17,8 +17,6 @@ namespace Backend.DTOs
         public string Password { get; set; }
 
         [Required]
-        public string Role { get; set; } // Farmer or Buyer
-
-        public string? Location { get; set; }
+        public string AccountType { get; set; } // Farmer or Customer
     }
 }

@@ -10,9 +10,11 @@ namespace Backend.Services.Implementations
     public class ProductService : IProductService
     {
         private readonly ApplicationDbContext _context;
-        public ProductService(ApplicationDbContext context)
+        private readonly ICurrentUserService _currentUser;
+        public ProductService(ApplicationDbContext context, ICurrentUserService currentUser)
         {
             _context = context;
+            _currentUser = currentUser;
         }
         public async Task<List<ProductListDto>> GetAllAsync()
         {
@@ -68,7 +70,7 @@ namespace Backend.Services.Implementations
                 Quantity = dto.Quantity,
                 UnitOfMeasurement = dto.UnitOfMeasurement,
                 CategoryId = dto.CategoryId,
-                FarmerId = 1 // TODO: Replace with actual farmer ID from authentication context
+                FarmerId = _currentUser.UserId
             };
 
             _context.Products.Add(product);

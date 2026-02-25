@@ -1,10 +1,10 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using Microsoft.AspNetCore.Identity;
 
 namespace Backend.Models
 {
-    public class User
+    public class User : IdentityUser<int>
     {
-        public int Id { get; set; }
 
         [Required]
         [MaxLength(50)]
@@ -13,18 +13,6 @@ namespace Backend.Models
         [Required]
         [MaxLength(50)]
         public string LastName { get; set; }
-
-        [Required]
-        [MaxLength(50)]
-        public string Email { get; set; }
-
-        [Required]
-        public string PasswordHash { get; set; }
-
-        [Required]
-        public string Role { get; set; }  // Farmer, Buyer
-
-        public string ? Location { get; set; }
 
         public ICollection<Product> ? Products { get; set; }
     }

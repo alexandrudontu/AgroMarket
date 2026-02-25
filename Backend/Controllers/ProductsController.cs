@@ -1,6 +1,7 @@
 ﻿using Backend.DTOs.Products;
 using Backend.Services.Interfaces;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Backend.Controllers
 {
@@ -27,6 +28,7 @@ namespace Backend.Controllers
             return Ok(await _service.GetByIdAsync(id));
         }
 
+        [Authorize(Roles = "Farmer")]
         [HttpPost]
         public async Task<ActionResult> Create(CreateProductDto dto)
         {
