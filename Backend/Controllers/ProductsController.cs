@@ -1,9 +1,8 @@
 ﻿using Backend.DTOs.Products;
-using Backend.Services.Implementations;
 using Backend.Services.Interfaces;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using System.Security.Claims;
 
 namespace Backend.Controllers
 {
@@ -37,7 +36,7 @@ namespace Backend.Controllers
             return Ok(await _service.GetMyProductsAsync());
         }
 
-        //[Authorize(Roles = "Farmer")]
+        [Authorize(Roles = "Farmer")]
         [HttpPost]
         public async Task<ActionResult> Create(CreateProductDto dto)
         {
@@ -45,6 +44,7 @@ namespace Backend.Controllers
             return Ok(product);
         }
 
+        [Authorize(Roles = "Farmer")]
         [HttpPut]
         public async Task<IActionResult> Update(UpdateProductDto dto)
         {
@@ -52,18 +52,12 @@ namespace Backend.Controllers
             return NoContent();
         }
 
+        [Authorize(Roles = "Farmer")]
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(int id)
         {
             await _service.DeleteAsync(id);
             return NoContent();
-        }
-
-        [HttpGet("secure")]
-        [Authorize]
-        public IActionResult Secure()
-        {
-            return Ok("JWT works");
         }
     }
 }

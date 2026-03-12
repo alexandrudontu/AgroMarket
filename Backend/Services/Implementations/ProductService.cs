@@ -101,6 +101,11 @@ namespace Backend.Services.Implementations
             if (product == null)
                 throw new Exception("Product not found");
 
+            if (product.FarmerId != _currentUser.UserId)
+            {
+                throw new UnauthorizedAccessException("You can only update your own products");
+            }
+
             product.Name = dto.Name;
             product.Description = dto.Description;
             product.Price = dto.Price;
@@ -116,6 +121,11 @@ namespace Backend.Services.Implementations
 
             if (product == null)
                 throw new Exception("Product not found");
+
+            if (product.FarmerId != _currentUser.UserId)
+            {
+                throw new UnauthorizedAccessException("You can only delete your own products");
+            }
 
             _context.Products.Remove(product);
             await _context.SaveChangesAsync();

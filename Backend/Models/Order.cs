@@ -11,11 +11,11 @@ namespace Backend.Models
 
         public decimal TotalAmount { get; set; }
 
-        // Foreign key to Buyer (User)
-        public int BuyerId { get; set; }
+        // Foreign key to Customer (User)
+        public string CustomerId { get; set; }
 
         // Navigation property
-        public User Buyer { get; set; }
+        public User Customer { get; set; }
 
         public ICollection<OrderItem> ? OrderItems { get; set; }
     }

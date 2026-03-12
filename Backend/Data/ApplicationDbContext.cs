@@ -11,16 +11,22 @@ namespace Backend.Data
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options)
         {
         }
-        //protected override void OnModelCreating(ModelBuilder modelBuilder)
-        //{
-        //    base.OnModelCreating(modelBuilder);
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            base.OnModelCreating(modelBuilder);
 
-        //    modelBuilder.Entity<Product>()
-        //        .HasOne(p => p.Farmer)
-        //        .WithMany(u => u.Products)
-        //        .HasForeignKey(p => p.FarmerId)
-        //        .OnDelete(DeleteBehavior.Restrict);
-        //}
+            modelBuilder.Entity<Product>()
+                .HasOne(p => p.Farmer)
+                .WithMany(u => u.Products)
+                .HasForeignKey(p => p.FarmerId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            modelBuilder.Entity<Order>()
+                .HasOne(o => o.Customer)
+                .WithMany()
+                .HasForeignKey(o => o.CustomerId)
+                .OnDelete(DeleteBehavior.Restrict);
+        }
 
         public DbSet<Product> Products { get; set; }
         public DbSet<Category> Categories { get; set; }
