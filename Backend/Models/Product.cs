@@ -30,7 +30,7 @@ namespace Backend.Models
         public Category Category { get; set; }  
 
         // Foreign key to User (Farmer)
-        public int FarmerId { get; set; }
+        public string FarmerId { get; set; }
 
         // Navigation property
         public User Farmer { get; set; }

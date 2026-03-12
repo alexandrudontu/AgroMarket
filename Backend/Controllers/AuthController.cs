@@ -3,8 +3,10 @@ using Backend.DTOs;
 using Backend.Models;
 using Backend.Services.Implementations;
 using Backend.Services.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System.Security.Claims;
 
 namespace Backend.Controllers
 {

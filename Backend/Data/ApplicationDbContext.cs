@@ -6,21 +6,21 @@ using System.Reflection.Emit;
 
 namespace Backend.Data
 {
-    public class ApplicationDbContext : IdentityDbContext<User, IdentityRole<int>, int>
+    public class ApplicationDbContext : IdentityDbContext<User>
     {
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options)
         {
         }
-        protected override void OnModelCreating(ModelBuilder modelBuilder)
-        {
-            base.OnModelCreating(modelBuilder);
+        //protected override void OnModelCreating(ModelBuilder modelBuilder)
+        //{
+        //    base.OnModelCreating(modelBuilder);
 
-            modelBuilder.Entity<Product>()
-                .HasOne(p => p.Farmer)
-                .WithMany(u => u.Products)
-                .HasForeignKey(p => p.FarmerId)
-                .OnDelete(DeleteBehavior.Restrict);
-        }
+        //    modelBuilder.Entity<Product>()
+        //        .HasOne(p => p.Farmer)
+        //        .WithMany(u => u.Products)
+        //        .HasForeignKey(p => p.FarmerId)
+        //        .OnDelete(DeleteBehavior.Restrict);
+        //}
 
         public DbSet<Product> Products { get; set; }
         public DbSet<Category> Categories { get; set; }

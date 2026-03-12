@@ -7,14 +7,14 @@ namespace Backend.Data.Seed
     {
         public static async Task SeedAsync(IServiceProvider serviceProvider)
         {
-            var roleManager = serviceProvider.GetRequiredService<RoleManager<IdentityRole<int>>>();
+            var roleManager = serviceProvider.GetRequiredService<RoleManager<IdentityRole>>();
 
             string[] roles = {"Admin", "Farmer", "Customer"};
 
             foreach (var role in roles)
             {
                 if (!await roleManager.RoleExistsAsync(role))
-                    await roleManager.CreateAsync(new IdentityRole<int> { Name = role });
+                    await roleManager.CreateAsync(new IdentityRole { Name = role });
             }
         }
     }

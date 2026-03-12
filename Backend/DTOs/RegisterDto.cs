@@ -17,6 +17,7 @@ namespace Backend.DTOs
         public string Password { get; set; }
 
         [Required]
+        [RegularExpression("Customer|Farmer")]
         public string AccountType { get; set; } // Farmer or Customer
     }
 }

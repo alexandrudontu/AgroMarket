@@ -38,7 +38,10 @@ namespace Backend.Services.Implementations
             var result = await _userManager.CreateAsync(user, dto.Password);
 
             if (!result.Succeeded)
-                throw new Exception("User creation failed");
+            {
+                var errors = string.Join(", ", result.Errors.Select(e => e.Description));
+                throw new Exception($"User creation failed: {errors}");
+            }
 
             await _userManager.AddToRoleAsync(user, dto.AccountType);
 
@@ -62,7 +65,7 @@ namespace Backend.Services.Implementations
 
             var claims = new List<Claim>
         {
-            new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
+            new Claim(ClaimTypes.NameIdentifier, user.Id),
             new Claim(ClaimTypes.Email, user.Email)
         };
 

@@ -1,7 +1,9 @@
 ﻿using Backend.DTOs.Products;
+using Backend.Services.Implementations;
 using Backend.Services.Interfaces;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
+using System.Security.Claims;
 
 namespace Backend.Controllers
 {
@@ -29,10 +31,18 @@ namespace Backend.Controllers
         }
 
         [Authorize(Roles = "Farmer")]
+        [HttpGet("my")]
+        public async Task<ActionResult> GetMyProducts()
+        {
+            return Ok(await _service.GetMyProductsAsync());
+        }
+
+        //[Authorize(Roles = "Farmer")]
         [HttpPost]
         public async Task<ActionResult> Create(CreateProductDto dto)
         {
-            return Ok(await _service.CreateAsync(dto));
+            var product = await _service.CreateAsync(dto);
+            return Ok(product);
         }
 
         [HttpPut]
@@ -47,6 +57,13 @@ namespace Backend.Controllers
         {
             await _service.DeleteAsync(id);
             return NoContent();
+        }
+
+        [HttpGet("secure")]
+        [Authorize]
+        public IActionResult Secure()
+        {
+            return Ok("JWT works");
         }
     }
 }

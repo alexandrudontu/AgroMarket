@@ -12,12 +12,11 @@ namespace Backend.Services.Implementations
             _httpContextAccessor = httpContextAccessor;
         }
 
-        public int UserId =>
-            int.Parse(_httpContextAccessor.HttpContext.User
-                .FindFirstValue(ClaimTypes.NameIdentifier));
+        public string UserId =>
+            _httpContextAccessor.HttpContext?.User?.FindFirstValue(ClaimTypes.NameIdentifier)
+            ?? throw new Exception("User not authenticated");
 
         public string Email =>
-            _httpContextAccessor.HttpContext.User
-                .FindFirstValue(ClaimTypes.Email);
+            _httpContextAccessor.HttpContext?.User?.FindFirstValue(ClaimTypes.Email);
     }
 }

@@ -6,6 +6,7 @@ namespace Backend.Services.Interfaces
     {
         Task<List<ProductListDto>> GetAllAsync();
         Task<ProductDetailsDto> GetByIdAsync(int id);
+        Task<List<ProductListDto>> GetMyProductsAsync();
         Task<ProductDetailsDto> CreateAsync(CreateProductDto dto);
         Task UpdateAsync(UpdateProductDto dto);
         Task DeleteAsync(int id);

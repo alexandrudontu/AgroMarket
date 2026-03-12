@@ -60,6 +60,22 @@ namespace Backend.Services.Implementations
                     }).ToList()
             };
         }
+        public async Task<List<ProductListDto>> GetMyProductsAsync()
+        {
+            return await _context.Products
+                .Where(p => p.FarmerId == _currentUser.UserId)
+                .Include(p => p.Category)
+                .Select(p => new ProductListDto
+                {
+                    Id = p.Id,
+                    Name = p.Name,
+                    Price = p.Price,
+                    UnitOfMeasurement = p.UnitOfMeasurement,
+                    CategoryName = p.Category.Name
+                })
+                .ToListAsync();
+        }
+
         public async Task<ProductDetailsDto> CreateAsync(CreateProductDto dto)
         {
             var product = new Product
