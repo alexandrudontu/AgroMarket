@@ -1,4 +1,6 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using Backend.Enums;
+using Backend.Migrations;
+using System.ComponentModel.DataAnnotations;
 
 namespace Backend.Models
 {
@@ -16,6 +18,8 @@ namespace Backend.Models
 
         // Navigation property
         public User Customer { get; set; }
+
+        public OrderStatus Status { get; set; } = OrderStatus.Pending;
 
         public ICollection<OrderItem> ? OrderItems { get; set; }
     }

@@ -29,5 +29,17 @@ namespace Backend.Controllers
             return Ok(await _service.GetFarmerOrdersAsync());
         }
 
+        [Authorize(Roles = "Customer")]
+        [HttpPost("checkout")]
+        public async Task<IActionResult> Checkout(CheckoutDto dto)
+        {
+            var orderId = await _service.CheckoutAsync(dto);
+
+            return Ok(new
+            {
+                message = "Order created successfully",
+                orderId = orderId
+            });
+        }
     }
 }

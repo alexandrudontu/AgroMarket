@@ -1,5 +1,6 @@
 ﻿using Backend.Data;
 using Backend.DTOs.Orders;
+using Backend.Enums;
 using Backend.Models;
 using Backend.Services.Interfaces;
 using Microsoft.EntityFrameworkCore;
@@ -109,5 +110,44 @@ namespace Backend.Services.Implementations
             return grouped;
         }
 
+        public async Task<int> CheckoutAsync(CheckoutDto dto)
+        {
+            var userId = _currentUser.UserId;
+
+            var cart = await _context.Carts
+                .Include(c => c.CartItems)
+                .ThenInclude(ci => ci.Product)
+                .FirstOrDefaultAsync(c => c.CustomerId == userId);
+
+            if (cart == null || !cart.CartItems.Any())
+                throw new Exception("Cart is empty");
+
+            var order = new Order
+            {
+                CustomerId = userId,
+                OrderDate = DateTime.UtcNow,
+                Status = OrderStatus.Pending,
+                OrderItems = new List<OrderItem>()
+            };
+
+            foreach (var item in cart.CartItems)
+            {
+                order.OrderItems.Add(new OrderItem
+                {
+                    ProductId = item.ProductId,
+                    Quantity = item.Quantity,
+                    UnitPrice = item.Product.Price
+                });
+            }
+
+            _context.Orders.Add(order);
+
+            //Clear cart
+            _context.CartItems.RemoveRange(cart.CartItems);
+
+            await _context.SaveChangesAsync();
+
+            return order.Id;
+        }
     }
 }

@@ -6,5 +6,6 @@ namespace Backend.Services.Interfaces
     {
         Task<OrderResponseDto> CreateOrderAsync(CreateOrderDto dto);
         Task<List<FarmerOrderDto>> GetFarmerOrdersAsync();
+        Task<int> CheckoutAsync(CheckoutDto dto);
     }
 }
