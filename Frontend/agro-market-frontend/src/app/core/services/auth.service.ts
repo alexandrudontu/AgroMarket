@@ -9,7 +9,8 @@ export class AuthService {
   constructor(private http: HttpClient) {}
 
   login(data: any) {
-    return this.http.post(`${this.baseUrl}/login`, data);
+    return this.http.post(`${this.baseUrl}/login`, data, {
+    responseType: 'text'});
   }
 
   register(data: any) {
@@ -26,5 +27,18 @@ export class AuthService {
 
   logout() {
     localStorage.removeItem('token');
+  }
+
+  isLoggedIn(): boolean {
+  return !!localStorage.getItem('token');
+  }
+
+  getUserRole(): string | null {
+    const token = localStorage.getItem('token');
+    if (!token) return null;
+
+    const payload = JSON.parse(atob(token.split('.')[1]));
+
+    return payload["http://schemas.microsoft.com/ws/2008/06/identity/claims/role"];
   }
 }

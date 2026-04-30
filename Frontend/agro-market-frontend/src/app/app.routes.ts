@@ -1,13 +1,19 @@
 import { Routes } from '@angular/router';
 import { ProductsList } from './features/products/products-list/products-list';
-import { Login } from './features/auth/login/login';
+import { LoginComponent } from './features/auth/login/login';
 import { Register } from './features/auth/register/register';
-import { Cart } from './features/cart/cart';
+import { CartComponent } from './features/cart/cart.component';
+import { Dashboard } from './features/farmer/dashboard/dashboard';
+import { authGuard } from './core/guards/auth-guard';
+import { roleGuard } from './core/guards/role-guard';
 
 export const routes: Routes = [
     { path: '', component: ProductsList },
-    { path: 'login', component: Login },
+    { path: 'login', component: LoginComponent },
     { path: 'register', component: Register },
-    { path: 'cart', component: Cart },
-    { path: 'farmer', component: FarmerDashboard }
+    { path: 'cart', component: CartComponent,
+            canActivate: [authGuard] },
+    { path: 'farmer', component: Dashboard,
+            canActivate: [authGuard, roleGuard],
+            data: { role: 'Farmer' } }
 ];
