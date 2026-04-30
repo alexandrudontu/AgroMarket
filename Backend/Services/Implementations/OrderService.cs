@@ -82,7 +82,7 @@ namespace Backend.Services.Implementations
         {
             var farmerId = _currentUser.UserId;
 
-            var orders = await _context.OrderItems
+             var orders = await _context.OrderItems
                 .Where(oi => oi.Product.FarmerId == farmerId)
                 .Include(oi => oi.Product)
                 .Include(oi => oi.Order)
@@ -108,6 +108,33 @@ namespace Backend.Services.Implementations
                 }).ToList();
 
             return grouped;
+        }
+
+        public Task<List<OrderResponseDto>> GetCustomerOrdersAsync()
+        {
+            var orders = _context.Orders
+                .Where(o => o.CustomerId == _currentUser.UserId)
+                .Include(o => o.OrderItems)
+                .ThenInclude(oi => oi.Product)
+                .ToList();
+
+            var grouped = orders
+                .GroupBy(o => o.OrderDate)
+                .Select(g => new OrderResponseDto
+                {
+                    OrderId = g.First().Id,
+                    OrderDate = g.Key,
+                    TotalAmount = g.Sum(o => o.OrderItems.Sum(oi => oi.Quantity * oi.UnitPrice)),
+                    Items = g.SelectMany(o => o.OrderItems).Select(oi => new OrderItemDetailsDto
+                    {
+                        ProductName = oi.Product.Name,
+                        Quantity = oi.Quantity,
+                        UnitPrice = oi.UnitPrice,
+                        LineTotal = oi.Quantity * oi.UnitPrice
+                    }).ToList()
+                }).ToList();
+
+            return Task.FromResult(grouped);
         }
 
         public async Task<int> CheckoutAsync(CheckoutDto dto)

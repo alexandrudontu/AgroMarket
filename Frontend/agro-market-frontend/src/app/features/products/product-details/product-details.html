@@ -1,1 +1,11 @@
-<p>product-details works!</p>
+<div> 
+    @if(product)
+    {
+        <h2>{{ product.name }}</h2>
+
+        <p>{{ product.description }}</p>
+        <p>Price: {{ product.price }} RON</p>
+
+        <button (click)="addToCart()">Add to cart</button>
+    }
+</div>

@@ -44,7 +44,6 @@ namespace Backend.Services.Implementations
             if (product == null)
                 throw new Exception("Product not found");
 
-            Console.WriteLine("prduct id: " + dto.ProductId);
             var cart = await GetOrCreateCart();
 
             var item = cart.CartItems

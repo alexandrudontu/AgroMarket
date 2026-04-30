@@ -30,6 +30,13 @@ namespace Backend.Controllers
         }
 
         [Authorize(Roles = "Customer")]
+        [HttpGet("customer")]
+        public async Task<IActionResult> GetCustomerOrders()
+        {
+            return Ok(await _service.GetCustomerOrdersAsync());
+        }
+
+        [Authorize(Roles = "Customer")]
         [HttpPost("checkout")]
         public async Task<IActionResult> Checkout(CheckoutDto dto)
         {

@@ -1,0 +1,8 @@
+<h2>My Orders</h2>
+
+<div> 
+  @for(o of orders; track o.orderId) {
+    <h3>Order #{{ o.orderId }}</h3>
+    <p>Total: {{ o.totalAmount }} RON</p>
+  }
+</div>

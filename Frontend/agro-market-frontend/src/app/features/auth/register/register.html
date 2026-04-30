@@ -1,1 +1,18 @@
-<p>register works!</p>
+<h2>Register</h2>
+
+<form (ngSubmit)="register()">
+
+    <input [(ngModel)]="model.firstName" name="firstName" placeholder="First Name" required />
+    <input [(ngModel)]="model.lastName" name="lastName" placeholder="Last Name" required />
+
+    <input [(ngModel)]="model.email" name="email" type="email" placeholder="Email" required />
+    <input [(ngModel)]="model.password" name="password" type="password" placeholder="Password" required />
+
+    <select [(ngModel)]="model.accountType" name="accountType">
+        <option value="Customer">Customer</option>
+        <option value="Farmer">Farmer</option>
+    </select>
+
+    <button type="submit">Register</button>
+
+</form>
