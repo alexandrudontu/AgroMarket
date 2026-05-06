@@ -1,18 +1,36 @@
-<h2>Register</h2>
+<div class="row justify-content-center">
 
-<form (ngSubmit)="register()">
+    <div class="col-md-5">
 
-    <input [(ngModel)]="model.firstName" name="firstName" placeholder="First Name" required />
-    <input [(ngModel)]="model.lastName" name="lastName" placeholder="Last Name" required />
+        <div class="card p-4 shadow">
 
-    <input [(ngModel)]="model.email" name="email" type="email" placeholder="Email" required />
-    <input [(ngModel)]="model.password" name="password" type="password" placeholder="Password" required />
+            <h3 class="text-center mb-3">Register</h3>
 
-    <select [(ngModel)]="model.accountType" name="accountType">
-        <option value="Customer">Customer</option>
-        <option value="Farmer">Farmer</option>
-    </select>
+            <form (ngSubmit)="register()">
 
-    <button type="submit">Register</button>
+                <input class="form-control mb-2" placeholder="First Name" [(ngModel)]="model.firstName"
+                    name="firstName" />
 
-</form>
+                <input class="form-control mb-2" placeholder="Last Name" [(ngModel)]="model.lastName" name="lastName" />
+
+                <input class="form-control mb-2" placeholder="Email" [(ngModel)]="model.email" name="email" />
+
+                <input type="password" class="form-control mb-2" placeholder="Password" [(ngModel)]="model.password"
+                    name="password" />
+
+                <select class="form-select mb-3" [(ngModel)]="model.accountType" name="accountType">
+                    <option value="Customer">Customer</option>
+                    <option value="Farmer">Farmer</option>
+                </select>
+
+                <button class="btn btn-success w-100">
+                    Register
+                </button>
+
+            </form>
+
+        </div>
+
+    </div>
+
+</div>

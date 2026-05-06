@@ -1,25 +1,26 @@
-<h2>Login</h2>
+<div class="row justify-content-center">
 
-<form (ngSubmit)="login()">
+  <div class="col-md-4">
 
-  <input
-    type="email"
-    placeholder="Email"
-    [(ngModel)]="model.email"
-    name="email"
-    required
-  />
+    <div class="card p-4 shadow">
 
-  <input
-    type="password"
-    placeholder="Password"
-    [(ngModel)]="model.password"
-    name="password"
-    required
-  />
+      <h3 class="text-center mb-3">Login</h3>
 
-  <button type="submit">
-    Login
-  </button>
+      <form (ngSubmit)="login()">
 
-</form>
+        <input class="form-control mb-3" placeholder="Email" [(ngModel)]="model.email" name="email" />
+
+        <input type="password" class="form-control mb-3" placeholder="Password" [(ngModel)]="model.password"
+          name="password" />
+
+        <button class="btn btn-primary w-100">
+          Login
+        </button>
+
+      </form>
+
+    </div>
+
+  </div>
+
+</div>

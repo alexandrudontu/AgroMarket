@@ -1,7 +1,29 @@
-<div>
-    @for (p of products; track p.id) {
-    <h3>{{ p.name }}</h3>
-    <p>{{ p.price }} RON</p>
-    <button (click)="addToCart(p.id)">Add to cart</button>
-    }
+<div class="row">
+
+    <div class="col-md-4 mb-4" *ngFor="let p of products">
+
+        <div class="card h-100 shadow-sm">
+
+            <div class="card-body">
+
+                <h5 class="card-title">{{ p.name }}</h5>
+
+                <p class="card-text text-muted">
+                    {{ p.description }}
+                </p>
+
+                <p class="fw-bold">
+                    {{ p.price }} RON
+                </p>
+
+                <button class="btn btn-primary w-100" (click)="addToCart(p.id)">
+                    Add to Cart
+                </button>
+
+            </div>
+
+        </div>
+
+    </div>
+
 </div>

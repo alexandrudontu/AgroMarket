@@ -1,11 +1,14 @@
-<div> 
-    @if(product)
-    {
-        <h2>{{ product.name }}</h2>
+<div class="card shadow p-4">
 
-        <p>{{ product.description }}</p>
-        <p>Price: {{ product.price }} RON</p>
+  <h2>{{ product.name }}</h2>
 
-        <button (click)="addToCart()">Add to cart</button>
-    }
+  <p class="text-muted">{{ product.description }}</p>
+
+  <h4 class="text-success">{{ product.price }} RON</h4>
+
+  <button class="btn btn-primary mt-3"
+          (click)="addToCart()">
+    Add to Cart
+  </button>
+
 </div>
