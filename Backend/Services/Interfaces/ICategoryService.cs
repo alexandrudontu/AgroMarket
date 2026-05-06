@@ -5,6 +5,7 @@ namespace Backend.Services.Interfaces
     public interface ICategoryService
     {
         Task<List<CategoryDto>> GetAllAsync();
+        Task<CategoryDto> GetByIdAsync(int id);
         Task<CategoryDto> CreateAsync(CreateCategoryDto dto);
         Task DeleteAsync(int id);
     }

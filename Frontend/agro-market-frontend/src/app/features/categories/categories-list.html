@@ -1,0 +1,21 @@
+<h2>Categories</h2>
+
+<div class="row">
+
+  <div class="col-md-3 mb-3"
+       *ngFor="let c of categories">
+
+    <div class="card p-3 text-center shadow-sm">
+
+      <h5>{{ c.name }}</h5>
+
+      <a [routerLink]="['/categories', c.id]"
+         class="btn btn-primary mt-2">
+        View Products
+      </a>
+
+    </div>
+
+  </div>
+
+</div>

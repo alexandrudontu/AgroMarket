@@ -1,0 +1,53 @@
+<h2>Products</h2>
+
+<!-- FILTERS -->
+<div class="row mb-3">
+
+  <div class="col-md-3">
+    <input type="number"
+           class="form-control"
+           placeholder="Min price"
+           [(ngModel)]="minPrice" />
+  </div>
+
+  <div class="col-md-3">
+    <input type="number"
+           class="form-control"
+           placeholder="Max price"
+           [(ngModel)]="maxPrice" />
+  </div>
+
+  <div class="col-md-3">
+    <button class="btn btn-primary"
+            (click)="applyFilters()">
+      Apply
+    </button>
+  </div>
+
+</div>
+
+<!-- PRODUCTS -->
+<div class="row">
+
+  <div class="col-md-4 mb-3"
+       *ngFor="let p of products">
+
+    <div class="card p-3 shadow-sm">
+
+      <h5>{{ p.name }}</h5>
+      <p>{{ p.price }} RON</p>
+
+      <span class="badge bg-secondary mb-2">
+        {{ p.categoryName }}
+      </span>
+
+      <a [routerLink]="['/products', p.id]"
+         class="btn btn-outline-primary">
+        View
+      </a>
+
+    </div>
+
+  </div>
+
+</div>

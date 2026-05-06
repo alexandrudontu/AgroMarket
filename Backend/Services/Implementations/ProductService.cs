@@ -16,20 +16,33 @@ namespace Backend.Services.Implementations
             _context = context;
             _currentUser = currentUser;
         }
-        public async Task<List<ProductListDto>> GetAllAsync()
+        public async Task<List<ProductListDto>> GetProductsAsync(string? search, int? categoryId, decimal? minPrice, decimal? maxPrice)
         {
-            return await _context.Products
-                .Include(p => p.Category)
-                .Select(p => new ProductListDto
-                {
-                    Id = p.Id,
-                    Name = p.Name,
-                    Price = p.Price,
-                    UnitOfMeasurement = p.UnitOfMeasurement,
-                    CategoryName = p.Category.Name
-                })
-                .ToListAsync();
+            var query = _context.Products.AsQueryable();
+
+            if (!string.IsNullOrEmpty(search))
+                query = query.Where(p =>
+                    EF.Functions.Like(p.Name, $"%{search}%"));
+
+            if (categoryId.HasValue)
+                query = query.Where(p => p.CategoryId == categoryId);
+
+            if (minPrice.HasValue)
+                query = query.Where(p => p.Price >= minPrice);
+
+            if (maxPrice.HasValue)
+                query = query.Where(p => p.Price <= maxPrice);
+
+            return await query.Take(10).Select(p => new ProductListDto
+            {
+                Id = p.Id,
+                Name = p.Name,
+                Price = p.Price,
+                UnitOfMeasurement = p.UnitOfMeasurement,
+                CategoryName = p.Category.Name
+            }).ToListAsync();
         }
+
         public async Task<ProductDetailsDto> GetByIdAsync(int id)
         {
             var product = await _context.Products

@@ -25,6 +25,17 @@ namespace Backend.Services.Implementations
                 })
                 .ToListAsync();
         }
+        public Task<CategoryDto> GetByIdAsync(int id)
+        {
+            return _context.Categories
+                .Where(c => c.Id == id)
+                .Select(c => new CategoryDto
+                {
+                    Id = c.Id,
+                    Name = c.Name
+                })
+                .FirstOrDefaultAsync() ?? throw new KeyNotFoundException("Category not found");
+        }
 
         public async Task<CategoryDto> CreateAsync(CreateCategoryDto dto)
         {

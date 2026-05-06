@@ -1,0 +1,28 @@
+<div class="row">
+
+    <!-- LIST -->
+    <div class="col-md-4">
+
+        <h3>Farmers</h3>
+
+        <div class="list-group">
+            <button class="list-group-item" *ngFor="let f of farmers" (click)="select(f)">
+                {{ f.firstName }} {{ f.lastName }}
+            </button>
+        </div>
+
+    </div>
+
+    <!-- DETAILS -->
+    <div class="col-md-8" *ngIf="selected">
+
+        <h3>Details</h3>
+
+        <div class="card p-3">
+            <p><b>Name:</b> {{ selected.firstName }} {{ selected.lastName }}</p>
+            <p><b>Email:</b> {{ selected.email }}</p>
+        </div>
+
+    </div>
+
+</div>

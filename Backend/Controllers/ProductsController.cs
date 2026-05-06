@@ -3,6 +3,7 @@ using Backend.Services.Interfaces;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace Backend.Controllers
 {
@@ -17,16 +18,21 @@ namespace Backend.Controllers
             _service = service;
         }
 
-        [HttpGet]
-        public async Task<ActionResult> GetAll()
-        {
-            return Ok(await _service.GetAllAsync());
-        }
-
         [HttpGet("{id}")]
         public async Task<ActionResult> GetById(int id)
         {
             return Ok(await _service.GetByIdAsync(id));
+        }
+
+        [HttpGet]
+        public async Task<ActionResult<IEnumerable<ProductDetailsDto>>> GetProducts(
+        [FromQuery] string? search,
+        [FromQuery] int? categoryId,
+        [FromQuery] decimal? minPrice,
+        [FromQuery] decimal? maxPrice)
+        {
+            var products = await _service.GetProductsAsync(search, categoryId, minPrice, maxPrice);
+            return Ok(products);
         }
 
         [Authorize(Roles = "Farmer")]

@@ -1,0 +1,58 @@
+import { Component, OnInit } from '@angular/core';
+import { ProductsService } from '../products/products.service';
+import { FormsModule } from '@angular/forms';
+import { RouterModule } from '@angular/router';
+import { CommonModule } from '@angular/common';
+import { Subject } from 'rxjs/internal/Subject';
+import { debounceTime, switchMap } from 'rxjs/operators';
+
+@Component({
+  selector: 'app-home',
+  imports: [FormsModule, RouterModule, CommonModule],
+  templateUrl: './home.html',
+  styleUrl: './home.css',
+})
+export class HomeComponent implements OnInit {
+
+  products: any[] = [];
+  searchResults: any[] = [];
+  search = '';
+
+  private searchSubject = new Subject<string>();
+
+  constructor(private productService: ProductsService) {}
+
+  ngOnInit() {
+
+    this.searchSubject.pipe(
+      debounceTime(300),
+      switchMap(term =>
+        this.productService.getAll({ search: term })
+      )
+    ).subscribe(res => {
+      this.searchResults = res.slice(0, 5);
+    });
+
+    this.loadRecommended();
+  }
+
+  loadRecommended() {
+    this.productService.getAll().subscribe(res => {
+      this.products = res.slice(0, 6);
+    });
+  }
+
+  onSearchChange() {
+    if (!this.search) {
+      this.searchResults = [];
+      return;
+    }
+
+    this.searchSubject.next(this.search);
+  }
+
+  selectResult() {
+    this.search = '';
+    this.searchResults = [];
+  }
+}

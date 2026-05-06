@@ -1,4 +1,4 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 
 @Injectable({ providedIn: 'root' })
@@ -8,8 +8,18 @@ export class ProductsService {
 
   constructor(private http: HttpClient) {}
 
-  getAll(params?: any) {
-    return this.http.get(this.baseUrl, { params });
+  getAll(paramsObj?: any) {
+    let params = new HttpParams();
+
+    if (paramsObj) {
+      Object.keys(paramsObj).forEach(key => {
+        if (paramsObj[key] !== null && paramsObj[key] !== undefined && paramsObj[key] !== '') {
+          params = params.append(key, paramsObj[key]);
+        }
+      });
+    }
+
+    return this.http.get<any[]>(this.baseUrl, { params });
   }
 
   getById(id: number) {

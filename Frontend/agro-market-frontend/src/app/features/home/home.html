@@ -1,0 +1,52 @@
+<div class="position-relative mb-4">
+
+  <input class="form-control"
+         [(ngModel)]="search"
+         (input)="onSearchChange()"
+         placeholder="Search products..." />
+
+  <!-- LIVE RESULTS -->
+  <div *ngIf="searchResults.length"
+       class="list-group position-absolute w-100 shadow"
+       style="z-index: 1000;">
+
+    <a *ngFor="let p of searchResults"
+       [routerLink]="['/products', p.id]"
+       (click)="selectResult()"
+       class="list-group-item list-group-item-action">
+
+      <div class="d-flex justify-content-between">
+        <span>{{ p.name }}</span>
+        <span class="text-muted">{{ p.price }} RON</span>
+      </div>
+
+    </a>
+
+  </div>
+
+</div>
+
+<hr>
+
+<h3>Recommended Products</h3>
+
+<div class="row">
+
+  <div class="col-md-4 mb-3"
+       *ngFor="let p of products">
+
+    <div class="card p-3 shadow-sm">
+
+      <h5>{{ p.name }}</h5>
+      <p>{{ p.price }} RON</p>
+
+      <a [routerLink]="['/products', p.id]"
+         class="btn btn-outline-primary">
+        View
+      </a>
+
+    </div>
+
+  </div>
+
+</div>
