@@ -5,6 +5,7 @@ import { RouterModule } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { Subject } from 'rxjs/internal/Subject';
 import { debounceTime, switchMap } from 'rxjs/operators';
+import { ChangeDetectorRef } from '@angular/core';
 
 @Component({
   selector: 'app-home',
@@ -20,7 +21,7 @@ export class HomeComponent implements OnInit {
 
   private searchSubject = new Subject<string>();
 
-  constructor(private productService: ProductsService) {}
+  constructor(private productService: ProductsService, private cdr: ChangeDetectorRef) {}
 
   ngOnInit() {
 
@@ -31,6 +32,7 @@ export class HomeComponent implements OnInit {
       )
     ).subscribe(res => {
       this.searchResults = res.slice(0, 5);
+      this.cdr.detectChanges();
     });
 
     this.loadRecommended();
@@ -39,6 +41,7 @@ export class HomeComponent implements OnInit {
   loadRecommended() {
     this.productService.getAll().subscribe(res => {
       this.products = res.slice(0, 6);
+      this.cdr.detectChanges();
     });
   }
 
@@ -54,5 +57,6 @@ export class HomeComponent implements OnInit {
   selectResult() {
     this.search = '';
     this.searchResults = [];
+    this.cdr.detectChanges();
   }
 }

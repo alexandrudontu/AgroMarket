@@ -11,6 +11,7 @@ import { authGuard } from './core/guards/auth-guard';
 import { roleGuard } from './core/guards/role-guard';
 import { CategoriesListComponent } from './features/categories/categories-list';
 import { CategoryProductsComponent } from './features/categories/category-products/category-products';
+import { AdminCategoriesComponent } from './features/admin/categories/admin-categories/admin-categories.component';
 
 export const routes: Routes = [
         { path: '', component: HomeComponent },
@@ -18,7 +19,9 @@ export const routes: Routes = [
         { path: 'register', component: RegisterComponent },
         { path: 'cart', 
           component: CartComponent,
-          canActivate: [authGuard] },
+          canActivate: [authGuard, roleGuard],
+          data: { role: 'Customer' }
+        },
         {
           path: 'categories',
           component: CategoriesListComponent
@@ -29,18 +32,24 @@ export const routes: Routes = [
           path: 'farmer',
           component: FarmerDashboardComponent,
           canActivate: [authGuard, roleGuard],
-          data: { role: 'Farmer' }
+          data: { roles: ['Farmer'] }
         },
         {
           path: 'orders',
           component: OrdersComponent,
-          canActivate: [authGuard]
+          canActivate: [authGuard, roleGuard],
+          data: { role: 'Customer' }
         },
         {
           path: 'admin/farmers',
           component: FarmersComponent,
           canActivate: [authGuard, roleGuard],
-          data: { role: 'Admin' }
+          data: { roles: ['Admin'] }
+        },
+        {
+          path: 'admin/categories',
+          component: AdminCategoriesComponent,
+          canActivate: [authGuard, roleGuard],
+          data: { roles: ['Admin'] }
         }
-
 ];

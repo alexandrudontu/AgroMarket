@@ -4,6 +4,7 @@ import { ProductsService } from '../../products/products.service';
 import { RouterModule } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { ChangeDetectorRef } from '@angular/core';
 
 @Component({
   selector: 'app-category-products',
@@ -22,7 +23,8 @@ export class CategoryProductsComponent implements OnInit {
 
   constructor(
     private route: ActivatedRoute,
-    private productService: ProductsService
+    private productService: ProductsService,
+    private cdr: ChangeDetectorRef
   ) {}
 
   ngOnInit() {
@@ -37,6 +39,7 @@ export class CategoryProductsComponent implements OnInit {
       maxPrice: this.maxPrice
     }).subscribe(res => {
       this.products = res;
+      this.cdr.detectChanges();
     });
   }
 

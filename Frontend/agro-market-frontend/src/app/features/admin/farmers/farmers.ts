@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FarmersService } from './farmers.service';
 import {CommonModule} from "@angular/common";
+import { ChangeDetectorRef } from '@angular/core';
 
 @Component({
   selector: 'farmers',
@@ -13,11 +14,12 @@ export class FarmersComponent implements OnInit {
   farmers: any[] = [];
   selected: any;
 
-  constructor(private service: FarmersService) {}
+  constructor(private service: FarmersService, private cdr: ChangeDetectorRef) {}
 
   ngOnInit() {
     this.service.getAll().subscribe((res: any) => {
       this.farmers = res;
+      this.cdr.detectChanges();
     });
   }
 

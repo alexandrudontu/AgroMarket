@@ -6,19 +6,32 @@
 
         <ul class="navbar-nav me-auto">
 
-            <li class="nav-item">
+            <li class="nav-item" *ngIf="authService.getUserRole() === 'Admin'">
+                <a class="nav-link" routerLink="/admin/categories">Categories</a>
+            </li>
+            <li class="nav-item" *ngIf="authService.getUserRole() === 'Customer'">
                 <a class="nav-link" routerLink="/categories">Categories</a>
             </li>
 
-            <li class="nav-item">
-                <a class="nav-link" routerLink="/cart">Cart</a>
+            <li class="nav-item" *ngIf="authService.getUserRole() === 'Customer'">
+
+                <a class="nav-link" routerLink="/cart">
+                    Cart
+                </a>
+
             </li>
 
-            <li class="nav-item">
-                <a class="nav-link" routerLink="/orders">Orders</a>
+            <li class="nav-item" *ngIf="authService.getUserRole() === 'Customer'">
+
+                <a class="nav-link" routerLink="/orders">
+                    Orders
+                </a>
             </li>
 
-            <li class="nav-item">
+            <li class="nav-item" *ngIf="authService.getUserRole() === 'Admin'">
+                <a class="nav-link" routerLink="/admin/farmers">Farmers</a>
+            </li>
+            <li class="nav-item" *ngIf="authService.getUserRole() === 'Farmer'">
                 <a class="nav-link" routerLink="/farmer">Farmer</a>
             </li>
 
@@ -26,8 +39,25 @@
 
         <div class="d-flex gap-2">
 
-            <a routerLink="/login" class="btn btn-outline-light">Login</a>
-            <a routerLink="/register" class="btn btn-success">Register</a>
+            <!-- NOT LOGGED -->
+            <ng-container *ngIf="!authService.isLoggedIn()">
+
+                <a routerLink="/login" class="btn btn-outline-light">
+                    Login
+                </a>
+
+                <a routerLink="/register" class="btn btn-success">
+                    Register
+                </a>
+
+            </ng-container>
+
+            <!-- LOGGED -->
+            <button *ngIf="authService.isLoggedIn()" class="btn btn-danger" (click)="logout()">
+
+                Logout
+
+            </button>
 
         </div>
 

@@ -11,4 +11,12 @@ export class CategoriesService {
   getAll() {
     return this.http.get(this.baseUrl);
   }
+
+  create(category: any) {
+  return this.http.post(this.baseUrl, category);
+  }
+
+  delete(id: number) {
+    return this.http.delete(`${this.baseUrl}/${id}`);
+  }
 }

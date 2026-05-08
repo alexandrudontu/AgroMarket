@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ProductsService } from '../../products/products.service';
 import { OrdersService } from '../../orders/orders.service';
+import { ChangeDetectorRef } from '@angular/core';
 
 @Component({
   selector: 'app-farmer-dashboard',
@@ -13,7 +14,8 @@ export class FarmerDashboardComponent implements OnInit {
 
   constructor(
     private productService: ProductsService,
-    private orderService: OrdersService
+    private orderService: OrdersService,
+    private cdr: ChangeDetectorRef
   ) {}
 
   ngOnInit() {
@@ -24,12 +26,14 @@ export class FarmerDashboardComponent implements OnInit {
   loadProducts() {
     this.productService.getMyProducts().subscribe((res: any) => {
       this.products = res;
+      this.cdr.detectChanges();
     });
   }
 
   loadOrders() {
     this.orderService.getFarmerOrders().subscribe((res: any) => {
       this.orders = res;
+      this.cdr.detectChanges();
     });
   }
 }

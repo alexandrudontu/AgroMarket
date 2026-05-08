@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { CartService } from './cart.service';
 import { OrdersService } from '.././orders/orders.service';
 import { CommonModule } from '@angular/common';
+import { ChangeDetectorRef } from '@angular/core';
 
 @Component({
   selector: 'app-cart',
@@ -14,7 +15,8 @@ export class CartComponent implements OnInit {
 
   constructor(
     private cartService: CartService,
-    private orderService: OrdersService
+    private orderService: OrdersService,
+    private cdr: ChangeDetectorRef
   ) {}
 
   ngOnInit() {
@@ -24,18 +26,21 @@ export class CartComponent implements OnInit {
   loadCart() {
     this.cartService.getCart().subscribe((res: any) => {
       this.cart = res;
+      this.cdr.detectChanges();
     });
   }
 
   remove(productId: number) {
     this.cartService.remove(productId).subscribe(() => {
       this.loadCart();
+      this.cdr.detectChanges();
     });
   }
 
   clear() {
     this.cartService.clear().subscribe(() => {
       this.loadCart();
+      this.cdr.detectChanges();
     });
   }
 
@@ -44,6 +49,7 @@ export class CartComponent implements OnInit {
       next: (res: any) => {
         alert('Order placed! ID: ' + res.orderId);
         this.loadCart();
+        this.cdr.detectChanges();
       },
       error: () => {
         alert('Checkout failed');

@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { CategoriesService } from './categories.service';
 import { RouterModule } from '@angular/router';
 import { CommonModule } from '@angular/common';
+import { ChangeDetectorRef } from '@angular/core';
 
 @Component({
   selector: 'categories-list',
@@ -13,11 +14,12 @@ export class CategoriesListComponent implements OnInit {
 
   categories: any = [];
 
-  constructor(private service: CategoriesService) {}
+  constructor(private service: CategoriesService, private cdr: ChangeDetectorRef) {}
 
   ngOnInit() {
     this.service.getAll().subscribe(res => {
       this.categories = res;
+      this.cdr.detectChanges();
     });
   }
 }
