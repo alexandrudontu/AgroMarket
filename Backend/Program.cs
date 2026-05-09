@@ -92,6 +92,7 @@ namespace Backend
             // Configure the HTTP request pipeline.
 
             app.UseHttpsRedirection();
+            app.UseStaticFiles();
 
             app.UseCors("Frontend");
 

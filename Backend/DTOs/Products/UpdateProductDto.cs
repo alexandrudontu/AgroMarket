@@ -1,18 +1,18 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using Backend.DTOs.Images;
+using System.ComponentModel.DataAnnotations;
 
 namespace Backend.DTOs.Products
 {
     public class UpdateProductDto
     {
         [Required]
-        public int Id { get; set; }
-
-        [Required]
         [MaxLength(200)]
         public string Name { get; set; }
 
         public string Description { get; set; }
 
+        [Required]
+        public int Quantity { get; set; }
         [Required]
         public decimal Price { get; set; }
 
@@ -21,5 +21,6 @@ namespace Backend.DTOs.Products
 
         [Required]
         public int CategoryId { get; set; }
+        public List<ProductImageDto>? ProductImages { get; set; }
     }
 }

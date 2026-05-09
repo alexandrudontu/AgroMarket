@@ -3,6 +3,8 @@ import { CommonModule } from '@angular/common';
 import { ActivatedRoute } from '@angular/router';
 import { ProductsService } from '../products.service';
 import { CartService } from '../../cart/cart.service';
+import { AuthService } from '../../auth/auth.service';
+import { ChangeDetectorRef } from '@angular/core';
 
 @Component({
   selector: 'app-product-details',
@@ -13,11 +15,14 @@ import { CartService } from '../../cart/cart.service';
 export class ProductDetailsComponent implements OnInit {
 
   product: any;
+  selectedImage: string = '';
 
   constructor(
     private route: ActivatedRoute,
     private productService: ProductsService,
-    private cartService: CartService
+    private cartService: CartService,
+    public authService: AuthService,
+    private cdr: ChangeDetectorRef
   ) {}
 
   ngOnInit() {
@@ -25,6 +30,12 @@ export class ProductDetailsComponent implements OnInit {
 
     this.productService.getById(id).subscribe((res: any) => {
       this.product = res;
+      console.log(this.product);
+
+      if (this.product.images?.length) {
+        this.selectedImage = this.product.images[0].imageUrl;
+      }
+      this.cdr.detectChanges();
     });
   }
 

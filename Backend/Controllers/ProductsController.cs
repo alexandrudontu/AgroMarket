@@ -1,4 +1,6 @@
-﻿using Backend.DTOs.Products;
+﻿using Backend.DTOs.Images;
+using Backend.DTOs.Products;
+using Backend.Models;
 using Backend.Services.Interfaces;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
@@ -50,19 +52,43 @@ namespace Backend.Controllers
             return Ok(product);
         }
 
-        [Authorize(Roles = "Farmer")]
-        [HttpPut]
-        public async Task<IActionResult> Update(UpdateProductDto dto)
+        [Authorize(Roles = "Farmer,Admin")]
+        [HttpPut("{id}")]
+        public async Task<IActionResult> Update(int id, UpdateProductDto dto)
         {
-            await _service.UpdateAsync(dto);
+            await _service.UpdateAsync(id, dto);
             return NoContent();
         }
 
-        [Authorize(Roles = "Farmer")]
+        [Authorize(Roles = "Farmer,Admin")]
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(int id)
         {
             await _service.DeleteAsync(id);
+            return NoContent();
+        }
+
+        [HttpPost("{id}/images")]
+        [Authorize(Roles = "Farmer,Admin")]
+        public async Task<ActionResult> UploadImage(
+        [FromForm] AddProductImageDto dto)
+        {
+            var image = await _service.UploadImageAsync(dto);
+            return Ok(image);
+        }
+
+        [HttpDelete("images/{id}")]
+        [Authorize(Roles = "Farmer,Admin")]
+        public async Task<IActionResult> DeleteImage(int id)
+        {
+            await _service.DeleteImageAsync(id);
+            return NoContent();
+        }
+
+        [HttpPut("images/{id}/main")]
+        public async Task<IActionResult> SetMain(int id)
+        {
+            await _service.SetMainImageAsync(id);
             return NoContent();
         }
     }

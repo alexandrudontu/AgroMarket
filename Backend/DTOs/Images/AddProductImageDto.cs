@@ -8,6 +8,6 @@ namespace Backend.DTOs.Images
         public int ProductId { get; set; }
 
         [Required]
-        public string ImageUrl { get; set; }
+        public IFormFile File { get; set; }
     }
 }

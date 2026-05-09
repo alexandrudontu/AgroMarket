@@ -1,25 +1,147 @@
-<h2>My Products</h2>
- 
-<div>
-    @for(p of products; track p.id) {
-    <p>{{ p.name }} - {{ p.price }} RON</p>
-    }
-</div>
+<div class="row">
 
-<hr>
+    <!-- FORM -->
+    <div class="col-md-4">
 
-<h2>My Orders</h2>
+        <div class="card p-3 shadow-sm">
 
-<div>
-    @for(o of orders; track o.orderId) {
+            <h3>
+                {{ editingProductId ? 'Edit Product' : 'Add Product' }}
+            </h3>
 
-    <h3>Order #{{ o.orderId }}</h3>
-    <p>Customer: {{ o.customerName }}</p>
+            <input class="form-control mb-2" placeholder="Name" [(ngModel)]="model.name">
 
-    <div>
-        @for(item of o.items; track item.productId) {
-        <p>{{ item.productName }} x{{ item.quantity }}</p>
-        }
+            <div class="border rounded p-3 mb-3 bg-light">
+
+                <label class="form-label fw-bold">
+                    Product Images
+                </label>
+
+                <input type="file" multiple class="form-control" (change)="onFileSelected($event)">
+
+            </div>
+
+            <div class="d-flex gap-2 flex-wrap mb-3">
+
+                <img *ngFor="let img of imagePreviews" [src]="img" class="rounded border shadow-sm" style="width:100px;
+              height:100px;
+              object-fit:cover;" />
+
+            </div>
+
+            <textarea class="form-control mb-2" placeholder="Description" [(ngModel)]="model.description">
+      </textarea>
+
+            <input type="number" min="0" class="form-control mb-2" placeholder="Price" [(ngModel)]="model.price">
+
+            <input type="number" min="0" class="form-control mb-2" placeholder="Stock" [(ngModel)]="model.quantity">
+
+            <select class="form-select mb-3" [(ngModel)]="model.unitOfMeasurement">
+
+                <option [ngValue]="null">Measurement Unit</option>
+                <option>Kg</option>
+                <option>L</option>
+                <option>Pieces</option>
+
+            </select>
+
+            <select class="form-select mb-3" [(ngModel)]="model.categoryId">
+
+                <option [ngValue]="null">
+                    Category
+                </option>
+
+                <option *ngFor="let c of categories" [ngValue]="c.id">
+
+                    {{ c.name }}
+
+                </option>
+
+            </select>
+
+            <button class="btn btn-success w-100" (click)="save()">
+
+                {{ editingProductId ? 'Update' : 'Create' }}
+
+            </button>
+
+        </div>
+
     </div>
-    }
+
+    <!-- PRODUCTS -->
+    <div class="col-md-8">
+
+        <div class="card p-3 shadow-sm mb-3" *ngFor="let p of products">
+
+            <div class="row">
+
+                <!-- IMAGE -->
+                <div class="col-md-3">
+
+                    <img *ngIf="p.productImages?.length" [src]="'https://localhost:7183' + p.productImages[0].imageUrl"
+                        class="img-fluid rounded" style="height:120px;
+            width:100%;
+            object-fit:cover;" />
+
+                </div>
+
+                <!-- INFO -->
+                <div class="col-md-6">
+
+                    <h5>{{ p.name }}</h5>
+
+                    <p>{{ p.description }}</p>
+
+                    <span class="badge bg-secondary">
+                        {{ p.categoryName }}
+                    </span>
+
+                    <h6 class="mt-2">
+                        {{ p.price }} RON
+                    </h6>
+                    <div class="d-flex gap-2 flex-wrap mb-2">
+
+                        <div *ngFor="let img of p.productImages" class="position-relative">
+
+                            <div class="d-flex flex-column align-items-center">
+                                <img [src]="'https://localhost:7183' + img.imageUrl" class="rounded border" style="width:80px;
+                height:80px;
+                object-fit:cover;" />
+
+                                <button class="btn btn-sm btn-danger mt-1" (click)="deleteImage(img.id)">
+                                    X
+                                </button>
+                            </div>
+
+                            <!-- MAIN -->
+                            <span *ngIf="img.isMain" class="badge bg-success position-absolute top-0 start-0">
+                                Main
+                            </span>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+                <!-- ACTIONS -->
+                <div class="col-md-3 d-flex flex-column gap-2">
+
+                    <button class="btn btn-primary" (click)="edit(p)">
+                        Edit
+                    </button>
+
+                    <button class="btn btn-danger" (click)="delete(p.id)">
+                        Delete
+                    </button>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
 </div>

@@ -9,6 +9,9 @@
             <li class="nav-item" *ngIf="authService.getUserRole() === 'Admin'">
                 <a class="nav-link" routerLink="/admin/categories">Categories</a>
             </li>
+            <li class="nav-item" *ngIf="authService.getUserRole() === 'Farmer'">
+                <a class="nav-link" routerLink="/farmer">Dashboard</a>
+            </li>
             <li class="nav-item" *ngIf="authService.getUserRole() === 'Customer'">
                 <a class="nav-link" routerLink="/categories">Categories</a>
             </li>
@@ -30,9 +33,6 @@
 
             <li class="nav-item" *ngIf="authService.getUserRole() === 'Admin'">
                 <a class="nav-link" routerLink="/admin/farmers">Farmers</a>
-            </li>
-            <li class="nav-item" *ngIf="authService.getUserRole() === 'Farmer'">
-                <a class="nav-link" routerLink="/farmer">Farmer</a>
             </li>
 
         </ul>

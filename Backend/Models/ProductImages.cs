@@ -9,6 +9,8 @@ namespace Backend.Models
         [Required]
         public string ImageUrl { get; set; } = string.Empty;
 
+        public bool IsMain { get; set; }
+
         // Foreign key to Product
         public int ProductId { get; set; }
 
