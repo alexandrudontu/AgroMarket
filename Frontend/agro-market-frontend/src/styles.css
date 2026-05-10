@@ -1,4 +1,15 @@
 /* You can add global styles to this file, and also import other style files */
+@import 'ngx-toastr/toastr';
+
+.toast-container .ngx-toastr {
+
+  border-radius: 16px !important;
+
+  box-shadow: 0 8px 24px rgba(0,0,0,0.15);
+
+  font-size: 15px;
+}
+
 .cart-item {
   border: 1px solid #ccc;
   padding: 10px;
@@ -6,7 +17,41 @@
 }
 
 button {
+  border:#333 solid 1px;
   margin-right: 10px;
   padding: 6px 12px;
   cursor: pointer;
+}
+
+.form-control {
+  background-color: rgb(202, 226, 203);
+  padding: 6px;
+  text-align: left;
+}
+
+.form-control:focus {
+  background-color: rgb(202, 226, 203);
+  box-shadow: none;
+  border: none;
+}
+
+.card {
+  border: 2px solid #070a06ea;
+  background-color: rgb(202, 226, 203);
+  border-radius: 8px;
+  padding: 16px;
+  margin-bottom: 16px;
+}
+
+body {
+  font-family: 'Montserrat', Tahoma, Geneva, Verdana, sans-serif;
+  font-optical-sizing: auto;
+  background: #f8fff8;
+  color: #333;
+}
+
+.products-count {
+  color: #6c757d;
+  font-size: 14px;
+  font-weight: 500;
 }

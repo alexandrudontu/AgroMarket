@@ -1,4 +1,6 @@
-﻿namespace Backend.DTOs.Orders
+﻿using Backend.Models;
+
+namespace Backend.DTOs.Orders
 {
     public class OrderResponseDto
     {
@@ -6,6 +8,7 @@
         public DateTime OrderDate { get; set; }
         public decimal TotalAmount { get; set; }
         public List<OrderItemDetailsDto> Items { get; set; }
+        public string CustomerName { get; set; }
     }
 
     public class OrderItemDetailsDto

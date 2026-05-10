@@ -4,12 +4,14 @@ import { FormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
 import { CategoriesService } from '../../../categories/categories.service';
 import { ChangeDetectorRef } from '@angular/core';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-admin-categories',
   standalone: true,
   imports: [CommonModule, FormsModule, RouterModule],
-  templateUrl: './admin-categories.component.html'
+  templateUrl: './admin-categories.component.html',
+  styleUrl: './admin-categories.component.css'
 })
 export class AdminCategoriesComponent implements OnInit {
 
@@ -17,7 +19,7 @@ export class AdminCategoriesComponent implements OnInit {
 
   newCategory = '';
 
-  constructor(private categoryService: CategoriesService, private cdr: ChangeDetectorRef) {}
+  constructor(private categoryService: CategoriesService, private cdr: ChangeDetectorRef, private toastr: ToastrService) {}
 
   ngOnInit(): void {
     this.loadCategories();
@@ -51,11 +53,12 @@ export class AdminCategoriesComponent implements OnInit {
         next: () => {
 
           this.newCategory = '';
-
+          this.toastr.success('Categorie adăugată cu succes!');
           this.loadCategories();
         },
         error: (err) => {
           console.error(err);
+          this.toastr.error('Eroare la adăugarea categoriei.');
         }
       });
   }

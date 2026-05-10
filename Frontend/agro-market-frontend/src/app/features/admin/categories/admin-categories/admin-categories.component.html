@@ -1,34 +1,39 @@
-<h2>Manage Categories</h2>
+<h2 class="mb-4 fw-bold">
+  Gestionează Categoriile
+</h2>
 
-<div class="card p-3 mb-4">
+<!-- ADD CATEGORY -->
+<div class="card shadow-sm border-0 rounded-4 p-3 mb-5">
 
   <div class="d-flex gap-2">
 
-    <input class="form-control"
-           [(ngModel)]="newCategory"
-           placeholder="Category name" />
+    <input class="form-control form-control-lg" [(ngModel)]="newCategory" placeholder="Categorie nouă" />
 
-    <button class="btn btn-success"
-            (click)="add()">
-      Add
+    <button class="btn btn-success px-4" (click)="add()">
+      Adaugă
     </button>
 
   </div>
 
 </div>
 
-<div class="card p-3 mb-2"
-     *ngFor="let c of categories">
+<!-- CATEGORIES GRID -->
+<div class="categories-grid">
 
-  <div class="d-flex justify-content-between align-items-center">
+  <div class="category-card" *ngFor="let c of categories" [routerLink]="['/categories', c.id]">
 
-    <span>{{ c.name }}</span>
+    <div class="category-content">
 
-    <a [routerLink]="['/categories', c.id]"
-         class="btn btn-primary mt-2">
-        View Products
-      </a>
-    
+      <!-- NAME -->
+      <h5 class="mb-0">
+        {{ c.name }}
+      </h5>
+
+      <p class="products-count mb-0 mt-2">
+        {{ c.productsCount }} produse
+      </p>
+
+    </div>
 
   </div>
 

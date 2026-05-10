@@ -1,3 +1,7 @@
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap"
+    rel="stylesheet">
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark px-3">
 
     <a class="navbar-brand" routerLink="/">AgroMarket</a>
@@ -7,19 +11,19 @@
         <ul class="navbar-nav me-auto">
 
             <li class="nav-item" *ngIf="authService.getUserRole() === 'Admin'">
-                <a class="nav-link" routerLink="/admin/categories">Categories</a>
+                <a class="nav-link" routerLink="/admin/categories">Categorii</a>
             </li>
             <li class="nav-item" *ngIf="authService.getUserRole() === 'Farmer'">
                 <a class="nav-link" routerLink="/farmer">Dashboard</a>
             </li>
             <li class="nav-item" *ngIf="authService.getUserRole() === 'Customer'">
-                <a class="nav-link" routerLink="/categories">Categories</a>
+                <a class="nav-link" routerLink="/categories">Categorii</a>
             </li>
 
             <li class="nav-item" *ngIf="authService.getUserRole() === 'Customer'">
 
                 <a class="nav-link" routerLink="/cart">
-                    Cart
+                    Coș
                 </a>
 
             </li>
@@ -27,12 +31,12 @@
             <li class="nav-item" *ngIf="authService.getUserRole() === 'Customer'">
 
                 <a class="nav-link" routerLink="/orders">
-                    Orders
+                    Comenzi
                 </a>
             </li>
 
             <li class="nav-item" *ngIf="authService.getUserRole() === 'Admin'">
-                <a class="nav-link" routerLink="/admin/farmers">Farmers</a>
+                <a class="nav-link" routerLink="/admin/farmers">Fermieri</a>
             </li>
 
         </ul>
@@ -47,7 +51,7 @@
                 </a>
 
                 <a routerLink="/register" class="btn btn-success">
-                    Register
+                    înregistrare
                 </a>
 
             </ng-container>

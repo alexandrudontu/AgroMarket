@@ -21,7 +21,8 @@ namespace Backend.Services.Implementations
                 .Select(c => new CategoryDto
                 {
                     Id = c.Id,
-                    Name = c.Name
+                    Name = c.Name,
+                    ProductsCount = c.Products.Count
                 })
                 .ToListAsync();
         }

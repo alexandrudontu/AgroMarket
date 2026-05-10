@@ -1,6 +1,8 @@
 ﻿using Backend.Data;
 using Backend.DTOs;
 using Backend.DTOs.Farmer;
+using Backend.DTOs.Images;
+using Backend.DTOs.Orders;
 using Backend.DTOs.Products;
 using Backend.Models;
 using Microsoft.AspNetCore.Authorization;
@@ -28,15 +30,87 @@ namespace Backend.Controllers
         [Authorize(Roles = "Admin")]
         public async Task<ActionResult<IEnumerable<FarmerDto>>> GetFarmers()
         {
-            var farmers = await _userManager.GetUsersInRoleAsync("Farmer");
+            var farmers = await _userManager
+                .GetUsersInRoleAsync("Farmer");
 
-            var result = farmers.Select(f => new FarmerDto
+            var result = new List<FarmerDto>();
+
+            foreach (var f in farmers)
             {
-                Id = f.Id,
-                FirstName = f.FirstName,
-                LastName = f.LastName,
-                Email = f.Email
-            });
+                // PRODUCTS
+                var products = await _context.Products
+                    .Where(p => p.FarmerId == f.Id)
+                    .Include(p => p.Images)
+                    .Include(p => p.Category)
+                    .ToListAsync();
+
+                // ORDERS containing farmer products
+                var orders = await _context.Orders
+                    .Include(o => o.OrderItems)
+                        .ThenInclude(oi => oi.Product)
+                    .Include(o => o.Customer)
+                    .Where(o => o.OrderItems
+                        .Any(oi => oi.Product.FarmerId == f.Id))
+                    .ToListAsync();
+
+                result.Add(new FarmerDto
+                {
+                    Id = f.Id,
+
+                    FirstName = f.FirstName,
+
+                    LastName = f.LastName,
+
+                    Email = f.Email,
+
+                    ProductsCount = products.Count,
+
+                    OrdersCount = orders.Count,
+
+                    Products = products.Select(p => new ProductListDto
+                    {
+                        Id = p.Id,
+
+                        Name = p.Name,
+
+                        Description = p.Description,
+
+                        Price = p.Price,
+
+                        Quantity = p.Quantity,
+
+                        UnitOfMeasurement = p.UnitOfMeasurement,
+
+                        CategoryId = p.CategoryId,
+
+                        CategoryName = p.Category.Name,
+
+                        ProductImages = p.Images
+                            .Select(i => new ProductImageDto
+                            {
+                                Id = i.Id,
+                                ImageUrl = i.ImageUrl,
+                                IsMain = i.IsMain
+                            })
+                            .ToList()
+
+                    }).ToList(),
+
+                    Orders = orders.Select(o => new OrderResponseDto
+                    {
+                        OrderId = o.Id,
+
+                        TotalAmount = o.TotalAmount,
+
+                        OrderDate = o.OrderDate,
+
+                        CustomerName =
+                            o.Customer.FirstName + " " +
+                            o.Customer.LastName
+
+                    }).ToList()
+                });
+            }
 
             return Ok(result);
         }

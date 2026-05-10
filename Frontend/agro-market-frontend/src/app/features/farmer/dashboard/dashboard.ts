@@ -6,6 +6,7 @@ import { FormsModule } from '@angular/forms';
 import { ChangeDetectorRef } from '@angular/core';
 import co from '@angular/common/locales/co';
 import th from '@angular/common/locales/th';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-farmer-dashboard',
@@ -36,7 +37,8 @@ export class FarmerDashboardComponent implements OnInit {
   constructor(
     private productService: ProductsService,
     private categoryService: CategoriesService,
-    private cdr: ChangeDetectorRef
+    private cdr: ChangeDetectorRef,
+    private toastr: ToastrService
   ) {}
 
   ngOnInit() {
@@ -68,6 +70,7 @@ export class FarmerDashboardComponent implements OnInit {
           // upload images
           this.uploadImages(createdProduct.id);
           this.cdr.detectChanges();
+          this.toastr.success('Produs adăugat cu succes!');
         
           this.afterSave();
         });
@@ -84,6 +87,7 @@ export class FarmerDashboardComponent implements OnInit {
       // upload new images
       this.uploadImages(this.editingProductId!);
       this.cdr.detectChanges();
+      this.toastr.success('Produs actualizat cu succes!');
       this.afterSave();
     });
   }
@@ -116,6 +120,7 @@ export class FarmerDashboardComponent implements OnInit {
 
     this.productService.delete(id)
       .subscribe(() => {
+        this.toastr.success('Produs șters cu succes!');
         this.loadProducts();
         this.cdr.detectChanges();
       });
