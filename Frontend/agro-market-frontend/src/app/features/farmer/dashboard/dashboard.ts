@@ -4,24 +4,50 @@ import { CategoriesService } from '../../categories/categories.service';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ChangeDetectorRef } from '@angular/core';
-import co from '@angular/common/locales/co';
-import th from '@angular/common/locales/th';
 import { ToastrService } from 'ngx-toastr';
+import {
+  trigger,
+  state,
+  style,
+  transition,
+  animate
+} from '@angular/animations';
 
 @Component({
   selector: 'app-farmer-dashboard',
   standalone: true,
   imports: [CommonModule, FormsModule],
-  templateUrl: './dashboard.html'
+  templateUrl: './dashboard.html',
+  styleUrls: ['./dashboard.css'],
+  animations: [
+    trigger('expandAnimation', [
+
+      state('collapsed', style({
+        height: '0px',
+        opacity: 0,
+        overflow: 'hidden'
+      })),
+
+      state('expanded', style({
+        height: '*',
+        opacity: 1
+      })),
+
+      transition('collapsed <=> expanded', [
+        animate('300ms ease')
+      ])
+    ])
+  ]
 })
 export class FarmerDashboardComponent implements OnInit {
 
   products: any[] = [];
   categories: any = [];
-
   selectedFiles: File[] = [];
   imagePreviews: string[] = [];
   editingProductId: number | null = null;
+  expandedProductId: number | null = null;
+  currentImageIndexes: { [key: number]: number } = {};
 
   model: any = {
     name: '',
@@ -69,10 +95,7 @@ export class FarmerDashboardComponent implements OnInit {
         
           // upload images
           this.uploadImages(createdProduct.id);
-          this.cdr.detectChanges();
           this.toastr.success('Produs adăugat cu succes!');
-        
-          this.afterSave();
         });
       
       return;
@@ -86,9 +109,7 @@ export class FarmerDashboardComponent implements OnInit {
     
       // upload new images
       this.uploadImages(this.editingProductId!);
-      this.cdr.detectChanges();
       this.toastr.success('Produs actualizat cu succes!');
-      this.afterSave();
     });
   }
 
@@ -111,18 +132,34 @@ export class FarmerDashboardComponent implements OnInit {
       productImages: product.productImages,
       categoryId: product.categoryId
     };
+
+      // smooth scroll to top
+    window.scrollTo({
+      top: 0,
+      behavior: 'smooth'
+    });
   }
 
   delete(id: number) {
-
-    if (!confirm('Delete product?'))
+    if (!confirm('Doriți să ștergeți acest produs?'))
       return;
 
     this.productService.delete(id)
-      .subscribe(() => {
-        this.toastr.success('Produs șters cu succes!');
-        this.loadProducts();
-        this.cdr.detectChanges();
+      .subscribe({
+
+        next: () => {
+
+          this.products =
+            this.products.filter(p => p.id !== id);
+
+          this.toastr.success(
+            'Produs șters cu succes!'
+          );
+        },
+
+        error: (err) => {
+          console.error(err);
+        }
       });
   }
 
@@ -168,8 +205,9 @@ export class FarmerDashboardComponent implements OnInit {
   }
 
   uploadImages(productId: number) {
-
+    // NO IMAGES
     if (!this.selectedFiles.length) {
+
       this.afterSave();
       return;
     }
@@ -180,24 +218,93 @@ export class FarmerDashboardComponent implements OnInit {
 
       this.productService
         .uploadImage(productId, file)
-        .subscribe(() => {
+        .subscribe({
 
-          this.cdr.detectChanges();
-          uploaded++;
+          next: () => {
 
-          if (uploaded === this.selectedFiles.length) {
-            this.afterSave();
+            uploaded++;
+
+            // ALL IMAGES UPLOADED
+            if (uploaded === this.selectedFiles.length) {
+
+              this.loadProducts();
+
+              this.resetForm();
+            }
+          },
+          error: (err) => {
+            console.error(err);
           }
         });
     }
   }
 
   deleteImage(id: number) {
+   this.productService.deleteImage(id)
+     .subscribe({
 
-    this.productService.deleteImage(id)
-      .subscribe(() => {
-        this.cdr.detectChanges();
-        this.loadProducts();
-      });
+       next: () => {
+
+         this.toastr.success('Imagine ștearsă');
+
+         this.loadProducts();
+       },
+
+       error: (err) => {
+         console.error(err);
+       }
+     });
+  }
+
+  toggleExpand(productId: number) {
+
+    if (this.expandedProductId === productId) {
+
+      this.expandedProductId = null;
+      this.resetForm();
+      return;
+    }
+
+    this.expandedProductId = productId;
+  }
+
+  nextImage(product: any) {
+    if (!product.productImages?.length)
+      return;
+
+    if (!this.currentImageIndexes[product.id]) {
+      this.currentImageIndexes[product.id] = 0;
+    }
+
+    this.currentImageIndexes[product.id] =
+      (this.currentImageIndexes[product.id] + 1)
+      % product.productImages.length;
+  }
+
+  prevImage(product: any) {
+    if (!product.productImages?.length)
+      return;
+
+    if (!this.currentImageIndexes[product.id]) {
+      this.currentImageIndexes[product.id] = 0;
+    }
+
+    this.currentImageIndexes[product.id]--;
+
+    if (this.currentImageIndexes[product.id] < 0) {
+
+      this.currentImageIndexes[product.id] =
+        product.productImages.length - 1;
+    }
+  }
+
+  getCurrentImage(product: any) {
+    if (!product.productImages?.length)
+      return null;
+
+    const index =
+      this.currentImageIndexes[product.id] || 0;
+
+    return product.productImages[index];
   }
 }

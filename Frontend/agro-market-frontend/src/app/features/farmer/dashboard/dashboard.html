@@ -3,138 +3,301 @@
     <!-- FORM -->
     <div class="col-md-4">
 
-        <div class="card p-3 shadow-sm">
+  <div class="product-form-card">
 
-            <h3>
-                {{ editingProductId ? 'Edit Product' : 'Add Product' }}
-            </h3>
+    <!-- HEADER -->
+    <div class="form-header">
 
-            <input class="form-control mb-2" placeholder="Name" [(ngModel)]="model.name">
+      <h2>
+        {{ editingProductId
+            ? 'Editare Produs'
+            : 'Adăugare Produs' }}
+      </h2>
 
-            <div class="border rounded p-3 mb-3 bg-light">
+    </div>
 
-                <label class="form-label fw-bold">
-                    Product Images
-                </label>
+    <!-- NAME -->
+    <div class="form-group">
 
-                <input type="file" multiple class="form-control" (change)="onFileSelected($event)">
+      <label>
+        Nume
+      </label>
 
-            </div>
+      <input type="text"
+             class="modern-input"
+             [(ngModel)]="model.name"
+             placeholder="Introduceți numele produsului">
 
-            <div class="d-flex gap-2 flex-wrap mb-3">
+    </div>
 
-                <img *ngFor="let img of imagePreviews" [src]="img" class="rounded border shadow-sm" style="width:100px;
-              height:100px;
-              object-fit:cover;" />
+    <!-- DESCRIPTION -->
+    <div class="form-group">
 
-            </div>
+      <label>
+        Descriere
+      </label>
 
-            <textarea class="form-control mb-2" placeholder="Description" [(ngModel)]="model.description">
+      <textarea class="modern-input modern-textarea"
+                [(ngModel)]="model.description"
+                placeholder="Descrieți produsul">
       </textarea>
 
-            <input type="number" min="0" class="form-control mb-2" placeholder="Price" [(ngModel)]="model.price">
+    </div>
 
-            <input type="number" min="0" class="form-control mb-2" placeholder="Stock" [(ngModel)]="model.quantity">
+    <!-- PRICE + STOCK -->
+    <div class="row">
 
-            <select class="form-select mb-3" [(ngModel)]="model.unitOfMeasurement">
+      <div class="col-md-6">
 
-                <option [ngValue]="null">Measurement Unit</option>
-                <option>Kg</option>
-                <option>L</option>
-                <option>Pieces</option>
+        <div class="form-group">
 
-            </select>
+          <label>
+            Preț (RON)
+          </label>
 
-            <select class="form-select mb-3" [(ngModel)]="model.categoryId">
-
-                <option [ngValue]="null">
-                    Category
-                </option>
-
-                <option *ngFor="let c of categories" [ngValue]="c.id">
-
-                    {{ c.name }}
-
-                </option>
-
-            </select>
-
-            <button class="btn btn-success w-100" (click)="save()">
-
-                {{ editingProductId ? 'Update' : 'Create' }}
-
-            </button>
+          <input type="number"
+                 min="0"
+                 class="modern-input"
+                 [(ngModel)]="model.price"
+                 placeholder="0">
 
         </div>
 
+      </div>
+
+      <div class="col-md-6">
+
+        <div class="form-group">
+
+          <label>
+            Stoc disponibil
+          </label>
+
+          <input type="number"
+                 min="0"
+                 class="modern-input"
+                 [(ngModel)]="model.quantity"
+                 placeholder="0">
+
+        </div>
+
+      </div>
+
     </div>
+
+    <!-- UNIT -->
+    <div class="form-group">
+
+      <label>
+        Unitate de măsură
+      </label>
+
+      <select class="modern-input"
+              [(ngModel)]="model.unitOfMeasurement">
+
+        <option [ngValue]="null">
+          Selectați unitatea
+        </option>
+
+        <option>Kg</option>
+        <option>L</option>
+        <option>Bucăți</option>
+
+      </select>
+
+    </div>
+
+    <!-- CATEGORY -->
+    <div class="form-group">
+
+      <label>
+        Categorie
+      </label>
+
+      <select class="modern-input"
+              [(ngModel)]="model.categoryId">
+
+        <option [ngValue]="null">
+          Selectați categoria
+        </option>
+
+        <option *ngFor="let c of categories"
+                [ngValue]="c.id">
+
+          {{ c.name }}
+
+        </option>
+
+      </select>
+
+    </div>
+
+    <!-- IMAGE UPLOAD -->
+    <div class="upload-area">
+
+      <div class="upload-icon">
+        📸
+      </div>
+
+      <h5>
+        Adăugați imagini pentru produs
+      </h5>
+
+      <input type="file"
+             multiple
+             class="form-control"
+             (change)="onFileSelected($event)">
+
+    </div>
+
+    <!-- PREVIEWS -->
+    <div class="preview-grid"
+         *ngIf="imagePreviews.length">
+
+      <div class="preview-item"
+           *ngFor="let img of imagePreviews">
+
+        <img [src]="img">
+
+      </div>
+
+    </div>
+
+    <!-- BUTTON -->
+    <button class="save-btn"
+            (click)="save()">
+
+      Salvează
+
+    </button>
+
+  </div>
+
+</div>
 
     <!-- PRODUCTS -->
     <div class="col-md-8">
 
-        <div class="card p-3 shadow-sm mb-3" *ngFor="let p of products">
+        <div class="products-grid">
 
-            <div class="row">
+            <div class="product-card" *ngFor="let p of products" [class.expanded]="expandedProductId === p.id">
 
-                <!-- IMAGE -->
-                <div class="col-md-3">
+                <!-- MAIN CARD -->
+                <div class="compact-view" (click)="toggleExpand(p.id)">
 
-                    <img *ngIf="p.productImages?.length" [src]="'https://localhost:7183' + p.productImages[0].imageUrl"
-                        class="img-fluid rounded" style="height:120px;
-            width:100%;
-            object-fit:cover;" />
+                    <!-- IMAGE -->
+                    <div class="carousel-container" *ngIf="p.productImages?.length">
 
-                </div>
+                        <!-- IMAGE -->
+                        <img [src]="'https://localhost:7183' + getCurrentImage(p)?.imageUrl"
+                            class="product-main-image" />
 
-                <!-- INFO -->
-                <div class="col-md-6">
+                        <!-- PREV -->
+                        <button class="carousel-btn left" (click)="prevImage(p); $event.stopPropagation()">
 
-                    <h5>{{ p.name }}</h5>
+                            ‹
 
-                    <p>{{ p.description }}</p>
+                        </button>
 
-                    <span class="badge bg-secondary">
-                        {{ p.categoryName }}
-                    </span>
+                        <!-- NEXT -->
+                        <button class="carousel-btn right" (click)="nextImage(p); $event.stopPropagation()">
 
-                    <h6 class="mt-2">
-                        {{ p.price }} RON
-                    </h6>
-                    <div class="d-flex gap-2 flex-wrap mb-2">
+                            ›
 
-                        <div *ngFor="let img of p.productImages" class="position-relative">
+                        </button>
 
-                            <div class="d-flex flex-column align-items-center">
-                                <img [src]="'https://localhost:7183' + img.imageUrl" class="rounded border" style="width:80px;
-                height:80px;
-                object-fit:cover;" />
+                    </div>
 
-                                <button class="btn btn-sm btn-danger mt-1" (click)="deleteImage(img.id)">
-                                    X
-                                </button>
-                            </div>
+                    <!-- INFO -->
+                    <div class="p-3">
 
-                            <!-- MAIN -->
-                            <span *ngIf="img.isMain" class="badge bg-success position-absolute top-0 start-0">
-                                Main
-                            </span>
+                        <h5 class="product-title">
+                            {{ p.name }}
+                        </h5>
 
+                        <div class="price">
+                            {{ p.price }} RON / {{ p.unitOfMeasurement }}
                         </div>
 
                     </div>
 
                 </div>
 
-                <!-- ACTIONS -->
-                <div class="col-md-3 d-flex flex-column gap-2">
+                <!-- EXPANDED -->
+                <div class="expanded-view" [@expandAnimation]="
+       expandedProductId === p.id
+       ? 'expanded'
+       : 'collapsed'
+     " *ngIf="expandedProductId === p.id">
 
-                    <button class="btn btn-primary" (click)="edit(p)">
-                        Edit
-                    </button>
+                    <hr>
 
-                    <button class="btn btn-danger" (click)="delete(p.id)">
-                        Delete
-                    </button>
+                    <!-- DETAILS -->
+                    <div class="mb-3">
+
+                        <p>
+                            <b>Categorie:</b>
+                            {{ p.categoryName }}
+                        </p>
+
+                        <div class="mb-3">
+
+                            <span class="stock-badge" [ngClass]="{
+          'stock-high': p.quantity > 20,
+          'stock-medium': p.quantity > 0 && p.quantity <= 20,
+          'stock-low': p.quantity === 0
+        }">
+
+                                {{ p.quantity === 0
+                                ? 'Stoc epuizat'
+                                : p.quantity + ' în stoc' }}
+
+                            </span>
+
+                        </div>
+
+                        <p>
+                            <b>Descriere:</b>
+                            {{ p.description }}
+                        </p>
+
+                    </div>
+
+                    <!-- GALLERY -->
+                    <div class="gallery mb-3">
+
+                        <div class="gallery-item" *ngFor="let img of p.productImages">
+
+                            <!-- IMAGE -->
+                            <img [src]="'https://localhost:7183' + img.imageUrl">
+
+                            <!-- OVERLAY -->
+                            <div class="image-overlay">
+
+                                <button class="delete-btn" (click)="deleteImage(img.id)">
+
+                                    ✕
+
+                                </button>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                    <!-- ACTIONS -->
+                    <div class="d-flex gap-2 product-actions">
+
+                        <button class="btn btn-primary" (click)="edit(p)">
+                            Editează
+                        </button>
+
+                        <button class="btn btn-danger" (click)="delete(p.id)">
+                            Șterge
+                        </button>
+
+                    </div>
 
                 </div>
 
