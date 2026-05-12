@@ -19,7 +19,7 @@ namespace Backend.Services.Implementations
         }
         public async Task<List<ProductListDto>> GetProductsAsync(string? search, int? categoryId, decimal? minPrice, decimal? maxPrice)
         {
-            var query = _context.Products.AsQueryable();
+            var query = _context.Products.Include(p => p.Images).Include(p => p.Category).AsQueryable();
 
             if (!string.IsNullOrEmpty(search))
                 query = query.Where(p =>
@@ -38,9 +38,16 @@ namespace Backend.Services.Implementations
             {
                 Id = p.Id,
                 Name = p.Name,
+                Description = p.Description,
+                Quantity = p.Quantity,
                 Price = p.Price,
                 UnitOfMeasurement = p.UnitOfMeasurement,
-                CategoryName = p.Category.Name
+                CategoryName = p.Category.Name,
+                ProductImages = p.Images.Select(i => new ProductImageDto
+                {
+                    Id = i.Id,
+                    ImageUrl = i.ImageUrl
+                }).ToList()
             }).ToListAsync();
         }
 

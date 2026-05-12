@@ -1,41 +1,121 @@
-<div *ngIf="product">
-  <div class="row">
+<div *ngIf="product" class="product-page">
 
-    <!-- GALLERY -->
-    <div class="col-md-6">
+  <div class="row g-5">
 
-      <img *ngIf="selectedImage" [src]="'https://localhost:7183' + selectedImage" class="img-fluid rounded shadow mb-3"
-        style="height:400px; object-fit:cover; width:100%;" />
+    <!-- LEFT -->
+    <div class="col-lg-6">
+
+      <!-- MAIN IMAGE -->
+      <div class="main-image-wrapper">
+
+        <img *ngIf="selectedImage"
+             [src]="'https://localhost:7183' + selectedImage"
+             class="main-image" />
+
+        <!-- STOCK BADGE -->
+        <div class="stock-badge"
+             [ngClass]="{
+               'in-stock': product.quantity > 10,
+               'low-stock': product.quantity <= 10 && product.quantity > 0,
+               'out-stock': product.quantity === 0
+             }">
+
+          {{
+            product.quantity === 0
+            ? 'Stoc epuizat'
+            : product.quantity + ' în stoc'
+          }}
+
+        </div>
+
+      </div>
 
       <!-- THUMBNAILS -->
-      <div class="d-flex gap-2 flex-wrap">
+      <div class="thumbnails">
 
-        <img *ngFor="let img of product.images" [src]="'https://localhost:7183' + img.imageUrl" (click)="selectedImage = img"
-          style="width:80px;
-                  height:80px;
-                  object-fit:cover;
-                  cursor:pointer;" class="rounded border" />
+        <img *ngFor="let img of product.productImages"
+             [src]="'https://localhost:7183' + img.imageUrl"
+
+             [class.active-thumb]="selectedImage === img.imageUrl"
+
+             (click)="selectedImage = img.imageUrl"
+
+             class="thumb-img" />
 
       </div>
 
     </div>
 
-    <!-- DETAILS -->
-    <div class="col-md-6">
+    <!-- RIGHT -->
+    <div class="col-lg-6">
 
-      <h2>{{ product.name }}</h2>
+      <!-- TITLE -->
+      <h1 class="product-title">
 
-      <p>{{ product.description }}</p>
+        {{ product.name }}
 
-      <p>{{ product.quantity }} {{ product.unitOfMeasurement }} in stock</p>
+      </h1>
 
-      <h4>{{ product.price }} RON / {{ product.unitOfMeasurement }}</h4>
+      <p>Vândut de: {{ product.farmerName }}</p>
 
-      <button *ngIf="authService.getUserRole() === 'Customer'" class="btn btn-primary" (click)="addToCart()">
-        Add to cart
+      <!-- DESCRIPTION -->
+      <p class="product-description">
+
+        {{ product.description }}
+
+      </p>
+
+      <!-- PRICE -->
+      <div class="price-box">
+
+        {{ product.price }} RON
+
+        <span>
+          / {{ product.unitOfMeasurement }}
+        </span>
+
+      </div>
+
+      <!-- QUANTITY SELECT -->
+      <div *ngIf="authService.getUserRole() === 'Customer'"
+           class="quantity-section">
+
+        <label>
+          Cantitate
+        </label>
+
+        <div class="quantity-controls">
+
+          <button (click)="decreaseQty()">
+            -
+          </button>
+
+          <span>
+            {{ quantity }}
+          </span>
+
+          <button (click)="increaseQty()">
+            +
+          </button>
+
+        </div>
+
+      </div>
+
+      <!-- ACTION -->
+      <button *ngIf="authService.getUserRole() === 'Customer'"
+              class="add-cart-btn"
+
+              [disabled]="product.quantity === 0"
+
+              (click)="addToCart()">
+
+        🛒 Adaugă în coș
+
       </button>
 
     </div>
 
   </div>
+
 </div>

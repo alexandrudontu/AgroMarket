@@ -1,20 +1,56 @@
-<h2>Categories</h2>
+<div class="categories-page">
 
-<div class="row">
+  <!-- HEADER -->
+  <div class="categories-header">
 
-  <div class="col-md-3 mb-3"
-       *ngFor="let c of categories">
+    <h1>
+      CATEGORII
+    </h1>
+    <p>
+      Explorează gama noastră diversificată de produse agricole
+    </p>
+  </div>
 
-    <div class="card p-3 text-center shadow-sm">
+  <!-- GRID -->
+  <div class="categories-grid">
 
-      <h5>{{ c.name }}</h5>
+    <a class="category-card"
 
-      <a [routerLink]="['/categories', c.id]"
-         class="btn btn-primary mt-2">
-        View Products
-      </a>
+       *ngFor="let c of categories"
 
-    </div>
+       [routerLink]="['/categories', c.id]">
+
+      <!-- BACKGROUND -->
+      <div class="category-overlay"></div>
+
+      <!-- CONTENT -->
+      <div class="category-content">
+
+        <!-- ICON -->
+        <div class="category-icon">
+
+          {{ getCategoryEmoji(c.name) }}
+
+        </div>
+
+        <!-- NAME -->
+        <h3>
+
+          {{ c.name }}
+
+        </h3>
+
+        <!-- COUNT -->
+        <p>
+
+          {{ c.productsCount || 0 }}
+          produse
+
+        </p>
+
+      </div>
+
+    </a>
 
   </div>
 

@@ -1,52 +1,150 @@
-<h2>Products</h2>
+<div class="category-products-page">
 
-<!-- FILTERS -->
-<div class="row mb-3">
+  <!-- HEADER -->
+  <div class="category-header">
 
-  <div class="col-md-3">
-    <input type="number"
-           class="form-control"
-           placeholder="Min price"
-           [(ngModel)]="minPrice" />
-  </div>
+    <div>
 
-  <div class="col-md-3">
-    <input type="number"
-           class="form-control"
-           placeholder="Max price"
-           [(ngModel)]="maxPrice" />
-  </div>
-
-  <div class="col-md-3">
-    <button class="btn btn-primary"
-            (click)="applyFilters()">
-      Apply
-    </button>
-  </div>
-
-</div>
-
-<!-- PRODUCTS -->
-<div class="row">
-
-  <div class="col-md-4 mb-3"
-       *ngFor="let p of products">
-
-    <div class="card p-3 shadow-sm">
-
-      <h5>{{ p.name }}</h5>
-      <p>{{ p.price }} RON</p>
-
-      <span class="badge bg-secondary mb-2">
-        {{ p.categoryName }}
-      </span>
-
-      <a [routerLink]="['/products', p.id]"
-         class="btn btn-outline-primary">
-        View
-      </a>
+      <h1>
+        Produse
+      </h1>
 
     </div>
+
+  </div>
+
+  <!-- FILTERS -->
+  <div class="filters-card">
+
+    <div class="filters-grid">
+
+      <!-- MIN -->
+      <div>
+
+        <label>
+          Pret Minim
+        </label>
+
+        <input type="number"
+               min="0"
+               class="modern-input"
+               placeholder="0"
+               [(ngModel)]="minPrice" />
+
+      </div>
+
+      <!-- MAX -->
+      <div>
+
+        <label>
+          Pret Maxim
+        </label>
+
+        <input type="number"
+               min="1"
+               class="modern-input"
+               placeholder="1000"
+               [(ngModel)]="maxPrice" />
+
+      </div>
+
+      <!-- BUTTON -->
+      <div class="filter-btn-wrapper">
+
+        <button class="apply-btn"
+                (click)="applyFilters()">
+
+          Aplică Filtre
+
+        </button>
+
+      </div>
+
+    </div>
+
+  </div>
+
+  <!-- EMPTY -->
+  <div *ngIf="!products.length"
+       class="empty-state">
+
+    <div class="empty-icon">
+      📦
+    </div>
+
+    <h3>
+      Nu s-au găsit produse
+    </h3>
+
+    <p>
+      Încearcă să ajustezi filtrele
+    </p>
+
+  </div>
+
+  <!-- PRODUCTS -->
+  <div class="products-grid">
+
+    <a class="product-card"
+
+       *ngFor="let p of products"
+
+       [routerLink]="['/products', p.id]">
+
+      <!-- IMAGE -->
+      <div class="image-wrapper">
+
+        <img *ngIf="p.productImages?.length"
+             [src]="'https://localhost:7183' + p.productImages[0].imageUrl">
+
+        <!-- CATEGORY -->
+        <span class="category-badge">
+
+          {{ p.categoryName }}
+
+        </span>
+
+      </div>
+
+      <!-- CONTENT -->
+      <div class="product-content">
+
+        <h5>
+
+          {{ p.name }}
+
+        </h5>
+
+        <span class="stock-badge" [ngClass]="{
+          'stock-high': p.quantity > 20,
+          'stock-medium': p.quantity > 0 && p.quantity <= 20,
+          'stock-low': p.quantity === 0
+        }">
+
+                {{ p.quantity === 0
+                ? 'Stoc epuizat'
+                : p.quantity + ' în stoc' }}
+
+              </span>
+
+        <!-- FOOTER -->
+        <div class="product-footer">
+
+          <div class="price">
+
+            {{ p.price }} RON
+
+            <span>
+              / {{ p.unitOfMeasurement }}
+            </span>
+
+          </div>
+
+        </div>
+
+      </div>
+
+    </a>
 
   </div>
 

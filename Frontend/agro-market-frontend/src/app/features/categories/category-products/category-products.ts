@@ -10,6 +10,7 @@ import { ChangeDetectorRef } from '@angular/core';
   selector: 'app-category-products',
   standalone: true,
   templateUrl: './category-products.html',
+  styleUrls: ['./category-products.css'],
   imports: [RouterModule, CommonModule, FormsModule]
 })
 export class CategoryProductsComponent implements OnInit {
@@ -44,6 +45,22 @@ export class CategoryProductsComponent implements OnInit {
   }
 
   applyFilters() {
+    if (this.minPrice != null && this.minPrice < 0) {
+      this.minPrice = 0;
+    }
+
+    if (this.maxPrice != null && this.maxPrice < 0) {
+      this.maxPrice = 0;
+    }
+
+    if (
+      this.minPrice != null &&
+      this.maxPrice != null &&
+      this.minPrice > this.maxPrice
+    ) {
+      return;
+    }
+
     this.loadProducts();
   }
 }

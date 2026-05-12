@@ -1,310 +1,287 @@
 <div class="row">
 
-    <!-- FORM -->
-    <div class="col-md-4">
+  <!-- FORM -->
+  <div class="col-md-4">
 
-  <div class="product-form-card">
+    <div class="product-form-card">
 
-    <!-- HEADER -->
-    <div class="form-header">
+      <!-- HEADER -->
+      <div class="form-header">
 
-      <h2>
-        {{ editingProductId
-            ? 'Editare Produs'
-            : 'Adăugare Produs' }}
-      </h2>
+        <h2>
+          {{ editingProductId
+          ? 'Editează Produs'
+          : 'Adaugă Produs' }}
+        </h2>
 
-    </div>
+      </div>
 
-    <!-- NAME -->
-    <div class="form-group">
+      <!-- NAME -->
+      <div class="form-group">
 
-      <label>
-        Nume
-      </label>
+        <label>
+          Nume
+        </label>
 
-      <input type="text"
-             class="modern-input"
-             [(ngModel)]="model.name"
-             placeholder="Introduceți numele produsului">
+        <input type="text" class="modern-input" [(ngModel)]="model.name" placeholder="Introduceți numele produsului">
 
-    </div>
+      </div>
 
-    <!-- DESCRIPTION -->
-    <div class="form-group">
+      <!-- DESCRIPTION -->
+      <div class="form-group">
 
-      <label>
-        Descriere
-      </label>
+        <label>
+          Descriere
+        </label>
 
-      <textarea class="modern-input modern-textarea"
-                [(ngModel)]="model.description"
-                placeholder="Descrieți produsul">
+        <textarea class="modern-input modern-textarea" [(ngModel)]="model.description" placeholder="Descrieți produsul">
       </textarea>
 
-    </div>
+      </div>
 
-    <!-- PRICE + STOCK -->
-    <div class="row">
+      <!-- PRICE + STOCK -->
+      <div class="row">
 
-      <div class="col-md-6">
+        <div class="col-md-6">
 
-        <div class="form-group">
+          <div class="form-group">
 
-          <label>
-            Preț (RON)
-          </label>
+            <label>
+              Preț (RON)
+            </label>
 
-          <input type="number"
-                 min="0"
-                 class="modern-input"
-                 [(ngModel)]="model.price"
-                 placeholder="0">
+            <input type="number" min="0" class="modern-input" [(ngModel)]="model.price" placeholder="0">
+
+          </div>
+
+        </div>
+
+        <div class="col-md-6">
+
+          <div class="form-group">
+
+            <label>
+              Stoc disponibil
+            </label>
+
+            <input type="number" min="0" class="modern-input" [(ngModel)]="model.quantity" placeholder="0">
+
+          </div>
 
         </div>
 
       </div>
 
-      <div class="col-md-6">
+      <!-- UNIT -->
+      <div class="form-group">
 
-        <div class="form-group">
+        <label>
+          Unitate de măsură
+        </label>
 
-          <label>
-            Stoc disponibil
-          </label>
+        <select class="modern-input" [(ngModel)]="model.unitOfMeasurement">
 
-          <input type="number"
-                 min="0"
-                 class="modern-input"
-                 [(ngModel)]="model.quantity"
-                 placeholder="0">
+          <option [ngValue]="null">
+            Selectați unitatea
+          </option>
+
+          <option>Kg</option>
+          <option>L</option>
+          <option>Bucăți</option>
+
+        </select>
+
+      </div>
+
+      <!-- CATEGORY -->
+      <div class="form-group">
+
+        <label>
+          Categorie
+        </label>
+
+        <select class="modern-input" [(ngModel)]="model.categoryId">
+
+          <option [ngValue]="null">
+            Selectați categoria
+          </option>
+
+          <option *ngFor="let c of categories" [ngValue]="c.id">
+
+            {{ c.name }}
+
+          </option>
+
+        </select>
+
+      </div>
+
+      <!-- IMAGE UPLOAD -->
+      <div class="upload-area">
+
+        <div class="upload-icon">
+          📸
+        </div>
+
+        <h5>
+          Adăugați imagini pentru produs
+        </h5>
+
+        <input type="file" multiple class="form-control" (change)="onFileSelected($event)">
+
+      </div>
+
+      <!-- PREVIEWS -->
+      <div class="preview-grid" *ngIf="imagePreviews.length">
+
+        <div class="preview-item" *ngFor="let img of imagePreviews">
+
+          <img [src]="img">
 
         </div>
 
       </div>
 
-    </div>
+      <!-- BUTTON -->
+      <button class="save-btn" (click)="save()">
 
-    <!-- UNIT -->
-    <div class="form-group">
+        Salvează
 
-      <label>
-        Unitate de măsură
-      </label>
-
-      <select class="modern-input"
-              [(ngModel)]="model.unitOfMeasurement">
-
-        <option [ngValue]="null">
-          Selectați unitatea
-        </option>
-
-        <option>Kg</option>
-        <option>L</option>
-        <option>Bucăți</option>
-
-      </select>
+      </button>
 
     </div>
-
-    <!-- CATEGORY -->
-    <div class="form-group">
-
-      <label>
-        Categorie
-      </label>
-
-      <select class="modern-input"
-              [(ngModel)]="model.categoryId">
-
-        <option [ngValue]="null">
-          Selectați categoria
-        </option>
-
-        <option *ngFor="let c of categories"
-                [ngValue]="c.id">
-
-          {{ c.name }}
-
-        </option>
-
-      </select>
-
-    </div>
-
-    <!-- IMAGE UPLOAD -->
-    <div class="upload-area">
-
-      <div class="upload-icon">
-        📸
-      </div>
-
-      <h5>
-        Adăugați imagini pentru produs
-      </h5>
-
-      <input type="file"
-             multiple
-             class="form-control"
-             (change)="onFileSelected($event)">
-
-    </div>
-
-    <!-- PREVIEWS -->
-    <div class="preview-grid"
-         *ngIf="imagePreviews.length">
-
-      <div class="preview-item"
-           *ngFor="let img of imagePreviews">
-
-        <img [src]="img">
-
-      </div>
-
-    </div>
-
-    <!-- BUTTON -->
-    <button class="save-btn"
-            (click)="save()">
-
-      Salvează
-
-    </button>
 
   </div>
 
-</div>
+  <!-- PRODUCTS -->
+  <div class="col-md-8">
 
-    <!-- PRODUCTS -->
-    <div class="col-md-8">
+    <div class="products-grid">
 
-        <div class="products-grid">
+      <div class="product-card" *ngFor="let p of products" [class.expanded]="expandedProductId === p.id">
 
-            <div class="product-card" *ngFor="let p of products" [class.expanded]="expandedProductId === p.id">
+        <!-- MAIN CARD -->
+        <div class="compact-view" (click)="toggleExpand(p.id)">
 
-                <!-- MAIN CARD -->
-                <div class="compact-view" (click)="toggleExpand(p.id)">
+          <!-- IMAGE -->
+          <div class="carousel-container" *ngIf="p.productImages?.length">
 
-                    <!-- IMAGE -->
-                    <div class="carousel-container" *ngIf="p.productImages?.length">
+            <!-- IMAGE -->
+            <img [src]="'https://localhost:7183' + getCurrentImage(p)?.imageUrl" class="product-main-image" />
 
-                        <!-- IMAGE -->
-                        <img [src]="'https://localhost:7183' + getCurrentImage(p)?.imageUrl"
-                            class="product-main-image" />
+            <!-- PREV -->
+            <button class="carousel-btn left" (click)="prevImage(p); $event.stopPropagation()">
 
-                        <!-- PREV -->
-                        <button class="carousel-btn left" (click)="prevImage(p); $event.stopPropagation()">
+              ‹
 
-                            ‹
+            </button>
 
-                        </button>
+            <!-- NEXT -->
+            <button class="carousel-btn right" (click)="nextImage(p); $event.stopPropagation()">
 
-                        <!-- NEXT -->
-                        <button class="carousel-btn right" (click)="nextImage(p); $event.stopPropagation()">
+              ›
 
-                            ›
+            </button>
 
-                        </button>
+          </div>
 
-                    </div>
+          <!-- INFO -->
+          <div class="p-3">
 
-                    <!-- INFO -->
-                    <div class="p-3">
+            <h5 class="product-title">
+              {{ p.name }}
+            </h5>
 
-                        <h5 class="product-title">
-                            {{ p.name }}
-                        </h5>
+            <div class="price">
+              {{ p.price }} RON / {{ p.unitOfMeasurement }}
+            </div>
 
-                        <div class="price">
-                            {{ p.price }} RON / {{ p.unitOfMeasurement }}
-                        </div>
+          </div>
 
-                    </div>
+        </div>
 
-                </div>
-
-                <!-- EXPANDED -->
-                <div class="expanded-view" [@expandAnimation]="
+        <!-- EXPANDED -->
+        <div class="expanded-view" [@expandAnimation]="
        expandedProductId === p.id
        ? 'expanded'
        : 'collapsed'
      " *ngIf="expandedProductId === p.id">
 
-                    <hr>
+          <hr>
 
-                    <!-- DETAILS -->
-                    <div class="mb-3">
+          <!-- DETAILS -->
+          <div class="mb-3">
 
-                        <p>
-                            <b>Categorie:</b>
-                            {{ p.categoryName }}
-                        </p>
+            <p>
+              <b>Categorie:</b>
+              {{ p.categoryName }}
+            </p>
 
-                        <div class="mb-3">
+            <div class="mb-3">
 
-                            <span class="stock-badge" [ngClass]="{
+              <span class="stock-badge" [ngClass]="{
           'stock-high': p.quantity > 20,
           'stock-medium': p.quantity > 0 && p.quantity <= 20,
           'stock-low': p.quantity === 0
         }">
 
-                                {{ p.quantity === 0
-                                ? 'Stoc epuizat'
-                                : p.quantity + ' în stoc' }}
+                {{ p.quantity === 0
+                ? 'Stoc epuizat'
+                : p.quantity + ' în stoc' }}
 
-                            </span>
-
-                        </div>
-
-                        <p>
-                            <b>Descriere:</b>
-                            {{ p.description }}
-                        </p>
-
-                    </div>
-
-                    <!-- GALLERY -->
-                    <div class="gallery mb-3">
-
-                        <div class="gallery-item" *ngFor="let img of p.productImages">
-
-                            <!-- IMAGE -->
-                            <img [src]="'https://localhost:7183' + img.imageUrl">
-
-                            <!-- OVERLAY -->
-                            <div class="image-overlay">
-
-                                <button class="delete-btn" (click)="deleteImage(img.id)">
-
-                                    ✕
-
-                                </button>
-
-                            </div>
-
-                        </div>
-
-                    </div>
-
-                    <!-- ACTIONS -->
-                    <div class="d-flex gap-2 product-actions">
-
-                        <button class="btn btn-primary" (click)="edit(p)">
-                            Editează
-                        </button>
-
-                        <button class="btn btn-danger" (click)="delete(p.id)">
-                            Șterge
-                        </button>
-
-                    </div>
-
-                </div>
+              </span>
 
             </div>
 
+            <p>
+              <b>Descriere:</b>
+              {{ p.description }}
+            </p>
+
+          </div>
+
+          <!-- GALLERY -->
+          <div class="gallery mb-3">
+
+            <div class="gallery-item" *ngFor="let img of p.productImages">
+
+              <!-- IMAGE -->
+              <img [src]="'https://localhost:7183' + img.imageUrl">
+
+              <!-- OVERLAY -->
+              <div class="image-overlay">
+
+                <button class="delete-btn" (click)="deleteImage(img.id)">
+
+                  ✕
+
+                </button>
+
+              </div>
+
+            </div>
+
+          </div>
+
+          <!-- ACTIONS -->
+          <div class="d-flex gap-2 product-actions">
+
+            <button class="btn btn-primary" (click)="edit(p)">
+              Editează
+            </button>
+
+            <button class="btn btn-danger" (click)="delete(p.id)">
+              Șterge
+            </button>
+
+          </div>
+
         </div>
 
+      </div>
+
     </div>
+
+  </div>
 
 </div>

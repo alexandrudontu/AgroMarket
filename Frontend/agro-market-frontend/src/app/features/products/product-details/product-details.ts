@@ -5,24 +5,28 @@ import { ProductsService } from '../products.service';
 import { CartService } from '../../cart/cart.service';
 import { AuthService } from '../../auth/auth.service';
 import { ChangeDetectorRef } from '@angular/core';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-product-details',
   templateUrl: './product-details.html',
   standalone: true,
+  styleUrls: ['./product-details.css'],
   imports: [CommonModule]
 })
 export class ProductDetailsComponent implements OnInit {
 
   product: any;
-  selectedImage: string = '';
+  selectedImage: any = null;
+  quantity = 1;
 
   constructor(
     private route: ActivatedRoute,
     private productService: ProductsService,
     private cartService: CartService,
     public authService: AuthService,
-    private cdr: ChangeDetectorRef
+    private cdr: ChangeDetectorRef,
+    private toastr: ToastrService
   ) {}
 
   ngOnInit() {
@@ -42,7 +46,23 @@ export class ProductDetailsComponent implements OnInit {
   addToCart() {
     this.cartService.addToCart({
       productId: this.product.id,
-      quantity: 1
-    }).subscribe(() => alert('Added to cart'));
+      quantity: this.quantity
+    }).subscribe(() => {
+      this.toastr.success('Produs adăugat în coș!');
+    });
+  }
+
+  increaseQty() {
+    if (this.quantity < this.product.quantity) {
+
+      this.quantity++;
+    }
+  }
+
+  decreaseQty() {
+    if (this.quantity > 1) {
+
+      this.quantity--;
+    }
   }
 }

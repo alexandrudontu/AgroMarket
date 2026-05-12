@@ -1,51 +1,139 @@
-<div class="position-relative mb-4">
+<!-- HERO -->
+<div class="hero-section">
 
-  <input class="form-control"
-         [(ngModel)]="search"
-         (input)="onSearchChange()"
-         placeholder="Search products..." />
+  <div class="hero-overlay"></div>
 
-  <!-- LIVE RESULTS -->
-  <div *ngIf="searchResults.length"
-       class="list-group position-absolute w-100 shadow"
-       style="z-index: 1000;">
+  <div class="hero-content">
 
-    <a *ngFor="let p of searchResults"
-       [routerLink]="['/products', p.id]"
-       (click)="selectResult()"
-       class="list-group-item list-group-item-action">
+    <h1>
+      Produse proaspete direct de la fermieri locali
+    </h1>
 
-      <div class="d-flex justify-content-between">
-        <span>{{ p.name }}</span>
-        <span class="text-muted">{{ p.price }} RON</span>
+    <p>
+      Descoperă legume,
+      fructe, produse lactate și multe altele
+    </p>
+
+    <!-- SEARCH -->
+    <div class="search-wrapper">
+
+      <input class="search-input"
+             [(ngModel)]="search"
+             (input)="onSearchChange()"
+             placeholder="Caută produse..." />
+
+      <span class="search-icon">
+        🔍
+      </span>
+
+      <!-- RESULTS -->
+      <div *ngIf="searchResults.length"
+           class="search-results">
+
+        <a *ngFor="let p of searchResults"
+           [routerLink]="['/products', p.id]"
+           (click)="selectResult()"
+           class="search-item">
+
+          <!-- IMAGE -->
+          <img *ngIf="p.productImages?.length"
+               [src]="'https://localhost:7183' + p.productImages[0]?.imageUrl">
+
+          <!-- INFO -->
+          <div>
+
+            <h6>
+              {{ p.name }}
+            </h6>
+
+            <span>
+              {{ p.price }} RON
+            </span>
+
+          </div>
+
+        </a>
+
       </div>
 
-    </a>
+    </div>
 
   </div>
 
 </div>
 
-<hr>
+<!-- RECOMMENDED -->
+<div class="container mt-5">
 
-<h3>Recommended Products</h3>
+  <div class="section-header">
 
-<div class="row">
+    <div>
 
-  <div class="col-md-4 mb-3"
-       *ngFor="let p of products">
-
-    <div class="card p-3 shadow-sm">
-
-      <h5>{{ p.name }}</h5>
-      <p>{{ p.price }} RON</p>
-
-      <a [routerLink]="['/products', p.id]"
-         class="btn btn-outline-primary">
-        View
-      </a>
+      <h2>
+        Produse Recomandate
+      </h2>
 
     </div>
+
+  </div>
+
+  <!-- PRODUCTS -->
+  <div class="products-grid">
+
+    <a class="product-card"
+         *ngFor="let p of products"
+         [routerLink]="['/products', p.id]">
+
+      <!-- IMAGE -->
+      <div class="image-wrapper">
+
+        <img *ngIf="p.productImages?.length"
+             [src]="'https://localhost:7183' + p.productImages[0]?.imageUrl">
+
+        <!-- CATEGORY -->
+        <span class="category-badge">
+          {{ p.categoryName }}
+        </span>
+
+      </div>
+
+      <!-- CONTENT -->
+      <div class="product-content">
+
+        <h5>
+          {{ p.name }}
+        </h5>
+
+        <span class="stock-badge" [ngClass]="{
+          'stock-high': p.quantity > 20,
+          'stock-medium': p.quantity > 0 && p.quantity <= 20,
+          'stock-low': p.quantity === 0
+        }">
+
+                {{ p.quantity === 0
+                ? 'Stoc epuizat'
+                : p.quantity + ' în stoc' }}
+
+              </span>
+
+        <!-- FOOTER -->
+        <div class="product-footer">
+
+          <div class="price">
+
+            {{ p.price }} RON
+
+            <span>
+              / {{ p.unitOfMeasurement }}
+            </span>
+
+          </div>
+
+        </div>
+
+      </div>
+
+    </a>
 
   </div>
 

@@ -6,13 +6,15 @@ import { CommonModule } from '@angular/common';
 import { Subject } from 'rxjs/internal/Subject';
 import { debounceTime, switchMap } from 'rxjs/operators';
 import { ChangeDetectorRef } from '@angular/core';
+import { ElementRef, HostListener } from '@angular/core';
 
 @Component({
   selector: 'app-home',
   imports: [FormsModule, RouterModule, CommonModule],
   templateUrl: './home.html',
-  styleUrl: './home.css',
+  styleUrls: ['./home.css'],
 })
+
 export class HomeComponent implements OnInit {
 
   products: any[] = [];
@@ -21,7 +23,7 @@ export class HomeComponent implements OnInit {
 
   private searchSubject = new Subject<string>();
 
-  constructor(private productService: ProductsService, private cdr: ChangeDetectorRef) {}
+  constructor(private productService: ProductsService, private cdr: ChangeDetectorRef, private elRef: ElementRef) {}
 
   ngOnInit() {
 
@@ -40,7 +42,7 @@ export class HomeComponent implements OnInit {
 
   loadRecommended() {
     this.productService.getAll().subscribe(res => {
-      this.products = res.slice(0, 6);
+      this.products = res.slice(0, 10);
       this.cdr.detectChanges();
     });
   }
@@ -59,4 +61,15 @@ export class HomeComponent implements OnInit {
     this.searchResults = [];
     this.cdr.detectChanges();
   }
+
+  @HostListener('document:click', ['$event'])
+onClickOutside(event: MouseEvent) {
+
+  if (!this.elRef.nativeElement.contains(event.target)) {
+
+    this.searchResults = [];
+
+    this.cdr.detectChanges();
+  }
+}
 }

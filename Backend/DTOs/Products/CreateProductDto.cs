@@ -11,11 +11,11 @@ namespace Backend.DTOs.Products
         public string Description { get; set; }
 
         [Required]
-        [Range(0, 100000)]
+        [Range(0, int.MaxValue)]
         public int Quantity { get; set; }
 
         [Required]
-        [Range(0.01, 100000)]
+        [Range(0.01, double.MaxValue)]
         public decimal Price { get; set; }
 
         [Required]
