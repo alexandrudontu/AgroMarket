@@ -34,7 +34,8 @@ namespace Backend.Services.Implementations
             {
                 CustomerId = _currentUser.UserId,
                 OrderDate = DateTime.UtcNow,
-                OrderItems = new List<OrderItem>()
+                OrderItems = new List<OrderItem>(),
+                Status = OrderStatus.Pending
             };
 
             decimal total = 0;
@@ -50,7 +51,8 @@ namespace Backend.Services.Implementations
                 {
                     ProductId = product.Id,
                     Quantity = item.Quantity,
-                    UnitPrice = product.Price
+                    UnitPrice = product.Price,
+                    UnitOfMeasurement = product.UnitOfMeasurement
                 };
 
                 total += item.Quantity * product.Price;
@@ -68,12 +70,15 @@ namespace Backend.Services.Implementations
                 OrderId = order.Id,
                 OrderDate = order.OrderDate,
                 TotalAmount = order.TotalAmount,
+                Status = OrderStatus.Pending.ToString(),
                 Items = order.OrderItems.Select(i => new OrderItemDetailsDto
                 {
                     ProductName = products.First(p => p.Id == i.ProductId).Name,
                     Quantity = i.Quantity,
                     UnitPrice = i.UnitPrice,
-                    LineTotal = i.Quantity * i.UnitPrice
+                    UnitOfMeasurement = i.UnitOfMeasurement,
+                    LineTotal = i.Quantity * i.UnitPrice,
+                    ImageUrl = i.ImageUrl
                 }).ToList()
             };
         }
@@ -116,6 +121,7 @@ namespace Backend.Services.Implementations
                 .Where(o => o.CustomerId == _currentUser.UserId)
                 .Include(o => o.OrderItems)
                 .ThenInclude(oi => oi.Product)
+                .ThenInclude(p => p.Images)
                 .ToList();
 
             var grouped = orders
@@ -124,13 +130,16 @@ namespace Backend.Services.Implementations
                 {
                     OrderId = g.First().Id,
                     OrderDate = g.Key,
+                    Status = OrderStatus.Pending.ToString(),
                     TotalAmount = g.Sum(o => o.OrderItems.Sum(oi => oi.Quantity * oi.UnitPrice)),
                     Items = g.SelectMany(o => o.OrderItems).Select(oi => new OrderItemDetailsDto
                     {
                         ProductName = oi.Product.Name,
                         Quantity = oi.Quantity,
+                        UnitOfMeasurement = oi.UnitOfMeasurement,
                         UnitPrice = oi.UnitPrice,
-                        LineTotal = oi.Quantity * oi.UnitPrice
+                        LineTotal = oi.Quantity * oi.UnitPrice,
+                        ImageUrl = oi.ImageUrl
                     }).ToList()
                 }).ToList();
 
@@ -144,6 +153,7 @@ namespace Backend.Services.Implementations
             var cart = await _context.Carts
                 .Include(c => c.CartItems)
                 .ThenInclude(ci => ci.Product)
+                .ThenInclude(p => p.Images)
                 .FirstOrDefaultAsync(c => c.CustomerId == userId);
 
             if (cart == null || !cart.CartItems.Any())
@@ -163,7 +173,9 @@ namespace Backend.Services.Implementations
                 {
                     ProductId = item.ProductId,
                     Quantity = item.Quantity,
-                    UnitPrice = item.Product.Price
+                    UnitPrice = item.Product.Price,
+                    UnitOfMeasurement = item.Product.UnitOfMeasurement,
+                    ImageUrl = item.Product.Images?.FirstOrDefault().ImageUrl
                 });
             }
 

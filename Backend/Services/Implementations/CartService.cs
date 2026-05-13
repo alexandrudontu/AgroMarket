@@ -26,9 +26,13 @@ namespace Backend.Services.Implementations
                 ProductId = i.ProductId,
                 ProductName = i.Product.Name,
                 Quantity = i.Quantity,
+                UnitOfMeasurement = i.Product.UnitOfMeasurement,
                 UnitPrice = i.Product.Price,
-                LineTotal = i.Quantity * i.Product.Price
-            }).ToList();
+                LineTotal = i.Quantity * i.Product.Price,
+                ImageUrl = i.Product.Images?
+                    .Select(img => img.ImageUrl)
+                    .FirstOrDefault()
+                }).ToList();
 
             return new CartDto
             {
@@ -93,6 +97,7 @@ namespace Backend.Services.Implementations
             var cart = await _context.Carts
                 .Include(c => c.CartItems)
                 .ThenInclude(i => i.Product)
+                .ThenInclude(p => p.Images)
                 .FirstOrDefaultAsync(c => c.CustomerId == _currentUser.UserId);
 
             if (cart == null)
@@ -108,6 +113,33 @@ namespace Backend.Services.Implementations
             }
 
             return cart;
+        }
+
+        public async Task UpdateQuantityAsync(UpdateCartItemDto dto)
+        {
+            var cart = await _context.Carts
+                .Include(c => c.CartItems)
+                .FirstOrDefaultAsync(c => c.CustomerId == _currentUser.UserId);
+
+            if (cart == null)
+                throw new Exception("Cart not found");
+
+            var item = cart.CartItems
+                .FirstOrDefault(i => i.ProductId == dto.ProductId);
+
+            if (item == null)
+                throw new Exception("Item not found");
+
+            if (dto.Quantity <= 0)
+            {
+                _context.CartItems.Remove(item);
+            }
+            else
+            {
+                item.Quantity = dto.Quantity;
+            }
+
+            await _context.SaveChangesAsync();
         }
     }
 }

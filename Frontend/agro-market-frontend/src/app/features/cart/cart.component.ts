@@ -4,11 +4,13 @@ import { OrdersService } from '.././orders/orders.service';
 import { CommonModule } from '@angular/common';
 import { ChangeDetectorRef } from '@angular/core';
 import { ToastrService } from 'ngx-toastr';
+import { RouterModule } from '@angular/router';
 
 @Component({
   selector: 'app-cart',
   templateUrl: './cart.component.html',
-  imports: [CommonModule]
+  styleUrls: ['./cart.component.css'],
+  imports: [CommonModule, RouterModule]
 })
 export class CartComponent implements OnInit {
 
@@ -58,6 +60,31 @@ export class CartComponent implements OnInit {
       error: () => {
         this.toastr.error('Plasarea comenzii a eșuat.');
       }
+    });
+  }
+
+  increaseQuantity(item: any) {
+    item.quantity++;
+
+    this.updateQuantity(item);
+  }
+
+  decreaseQuantity(item: any) {
+    if (item.quantity <= 1)
+      return;
+
+    item.quantity--;
+
+    this.updateQuantity(item);
+  }
+
+  updateQuantity(item: any) {
+    this.cartService.updateQuantity({
+      productId: item.productId,
+      quantity: item.quantity
+    }).subscribe(() => {
+
+      this.loadCart();
     });
   }
 }

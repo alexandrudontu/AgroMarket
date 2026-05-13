@@ -20,7 +20,7 @@ export const routes: Routes = [
         { path: 'cart', 
           component: CartComponent,
           canActivate: [authGuard, roleGuard],
-          data: { role: 'Customer' }
+          data: { roles: ['Customer'] }
         },
         {
           path: 'categories',
@@ -38,7 +38,7 @@ export const routes: Routes = [
           path: 'orders',
           component: OrdersComponent,
           canActivate: [authGuard, roleGuard],
-          data: { role: 'Customer' }
+          data: { roles: ['Customer'] }
         },
         {
           path: 'admin/farmers',

@@ -11,5 +11,7 @@ namespace Backend.Services.Interfaces
         Task RemoveFromCartAsync(int productId);
 
         Task ClearCartAsync();
+
+        Task UpdateQuantityAsync(UpdateCartItemDto dto);
     }
 }

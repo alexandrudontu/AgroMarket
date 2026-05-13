@@ -9,6 +9,7 @@ namespace Backend.DTOs.Orders
         public decimal TotalAmount { get; set; }
         public List<OrderItemDetailsDto> Items { get; set; }
         public string CustomerName { get; set; }
+        public string Status { get; set; }
     }
 
     public class OrderItemDetailsDto
@@ -18,5 +19,6 @@ namespace Backend.DTOs.Orders
         public int Quantity { get; set; }
         public decimal UnitPrice { get; set; }
         public decimal LineTotal { get; set; }
+        public string? ImageUrl { get; set; }
     }
 }

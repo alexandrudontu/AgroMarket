@@ -16,6 +16,13 @@ export class CartService {
     return this.http.post(this.baseUrl, item);
   }
 
+  updateQuantity(data: any) {    
+    return this.http.put(
+      `${this.baseUrl}/update`,
+      data
+    );
+  }
+
   remove(productId: number) {
     return this.http.delete(`${this.baseUrl}/${productId}`);
   }

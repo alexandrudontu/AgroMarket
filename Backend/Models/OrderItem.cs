@@ -12,6 +12,11 @@ namespace Backend.Models
         [Required]
         public decimal UnitPrice { get; set; }
 
+        [Required]
+        public string UnitOfMeasurement { get; set; }
+
+        public string ImageUrl { get; set; }
+
         // Foreign key to Product
         public int ProductId { get; set; }
 

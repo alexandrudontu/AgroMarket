@@ -1,4 +1,5 @@
 ﻿using Backend.DTOs.Cart;
+using Backend.Services.Implementations;
 using Backend.Services.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -39,6 +40,14 @@ namespace Backend.Controllers
         public async Task<IActionResult> Clear()
         {
             await _service.ClearCartAsync();
+            return NoContent();
+        }
+
+        [HttpPut("update")]
+        public async Task<IActionResult> UpdateQuantity(UpdateCartItemDto dto)
+        {
+            await _service.UpdateQuantityAsync(dto);
+
             return NoContent();
         }
     }

@@ -1,8 +1,158 @@
-<h2>My Orders</h2>
+<div class="orders-page">
 
-<div> 
-  @for(o of orders; track o.orderId) {
-    <h3>Order #{{ o.orderId }}</h3>
-    <p>Total: {{ o.totalAmount }} RON</p>
-  }
+  <!-- HEADER -->
+  <div class="orders-header">
+
+    <div>
+
+      <h1>
+        Comenzile mele
+      </h1>
+
+      <p>
+        Urmărește achizițiile și istoricul comenzilor
+      </p>
+
+    </div>
+
+  </div>
+
+  <!-- EMPTY -->
+  <div *ngIf="!orders.length"
+       class="empty-orders">
+
+    <div class="empty-icon">
+      📦
+    </div>
+
+    <h3>
+      Nu există comenzi încă
+    </h3>
+
+    <p>
+      Achizițiile finalizate vor apărea aici
+    </p>
+
+    <a routerLink="/"
+       class="shop-btn">
+
+      Începe cumpărăturile
+
+    </a>
+
+  </div>
+
+  <!-- ORDERS -->
+  <div class="orders-list">
+
+    <div class="order-card"
+
+         *ngFor="let o of orders">
+
+      <!-- TOP -->
+      <div class="order-top">
+
+        <div>
+
+          <h3>
+
+            Comanda Nr. {{ o.orderId }}
+
+          </h3>
+
+          <p class="order-date">
+
+            {{ o.orderDate | date: 'dd/MM/yyyy - HH:mm' : 'UTC+6' }}
+
+          </p>
+
+        </div>
+
+        <!-- STATUS -->
+        <div class="status-badge"
+             [ngClass]="{
+               'completed': o.status === 'Completed',
+               'pending': o.status === 'Pending',
+               'cancelled': o.status === 'Cancelled'
+             }">
+
+          {{ o.status }}
+
+        </div>
+
+      </div>
+
+      <!-- ITEMS -->
+      <div class="order-items">
+
+        <div class="order-item"
+
+             *ngFor="let item of o.items">
+
+          <!-- IMAGE -->
+          <img [src]="item.imageUrl
+               ? 'https://localhost:7183' + item.imageUrl
+               : 'https://placehold.co/200x200?text=No+Image'">
+
+          <!-- INFO -->
+          <div class="item-info">
+
+            <h5>
+
+              {{ item.productName }}
+
+            </h5>
+
+            <p>
+
+              {{ item.quantity }} {{ item.unitOfMeasurement }}
+              ×
+              {{ item.unitPrice }} RON
+
+            </p>
+
+          </div>
+
+          <!-- TOTAL -->
+          <div class="item-total">
+
+            {{ item.lineTotal }} RON
+
+          </div>
+
+        </div>
+
+      </div>
+
+      <!-- FOOTER -->
+      <div class="order-footer">
+
+        <div>
+
+          <span class="products-count">
+
+            {{ o.items.length }}
+            produse
+
+          </span>
+
+        </div>
+
+        <div class="order-total">
+
+          Total:
+          <span>
+
+            {{ o.totalAmount }} RON
+
+          </span>
+
+        </div>
+
+      </div>
+
+    </div>
+
+  </div>
+
 </div>

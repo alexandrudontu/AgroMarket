@@ -8,8 +8,12 @@
 
         public int Quantity { get; set; }
 
+        public string UnitOfMeasurement { get; set; } = string.Empty;
+
         public decimal UnitPrice { get; set; }
 
         public decimal LineTotal { get; set; }
+
+        public string? ImageUrl { get; set; }
     }
 }
