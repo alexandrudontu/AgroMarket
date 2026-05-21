@@ -124,7 +124,7 @@
 
   display: grid;
 
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: repeat(4, 1fr);
 
   gap: 24px;
 }
@@ -320,4 +320,10 @@
   background: #f8d7da;
 
   color: #842029;
+}
+
+.distance {
+  color: #198754;
+  font-weight: 700;
+  font-size: 14px;
 }

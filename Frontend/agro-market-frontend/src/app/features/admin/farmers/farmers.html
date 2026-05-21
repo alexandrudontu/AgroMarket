@@ -151,7 +151,7 @@
               </td>
 
               <td>
-                {{ o.orderDate | date }}
+                {{ o.orderDate | date :'dd MM yyyy - HH:mm' : 'UTC+6' }}
               </td>
 
               <td>

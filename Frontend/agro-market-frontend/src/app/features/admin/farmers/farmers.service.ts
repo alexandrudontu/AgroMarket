@@ -15,4 +15,10 @@ export class FarmersService {
   getById(id: number) {
     return this.http.get(`${this.baseUrl}/${id}`);
   }
+
+  getFarmerOrders(farmerId: string) {
+    return this.http.get(
+      `https://localhost:7183/api/orders/farmer/${farmerId}`
+    );
+  }
 }

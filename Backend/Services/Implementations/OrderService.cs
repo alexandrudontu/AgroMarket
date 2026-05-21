@@ -83,34 +83,66 @@ namespace Backend.Services.Implementations
             };
         }
 
-        public async Task<List<FarmerOrderDto>> GetFarmerOrdersAsync()
+        public async Task<List<FarmerOrderDto>> GetFarmerOrdersAsync(string farmerId)
         {
-            var farmerId = _currentUser.UserId;
+            var orders = await _context.OrderItems
 
-             var orders = await _context.OrderItems
-                .Where(oi => oi.Product.FarmerId == farmerId)
+                .Where(oi =>
+                    oi.Product.FarmerId == farmerId)
+
                 .Include(oi => oi.Product)
+                    .ThenInclude(p => p.Images)
+
                 .Include(oi => oi.Order)
-                .ThenInclude(o => o.Customer)
+                    .ThenInclude(o => o.Customer)
+
                 .ToListAsync();
 
             var grouped = orders
-                .GroupBy(o => o.OrderId)
+
+                .GroupBy(oi => oi.OrderId)
+
                 .Select(g => new FarmerOrderDto
                 {
                     OrderId = g.Key,
-                    CustomerName = g.First().Order.Customer.FirstName + " " +
-                                   g.First().Order.Customer.LastName,
-                    OrderDate = g.First().Order.OrderDate,
 
-                    Items = g.Select(i => new FarmerOrderItemDto
-                    {
-                        ProductName = i.Product.Name,
-                        Quantity = i.Quantity,
-                        UnitPrice = i.UnitPrice,
-                        LineTotal = i.Quantity * i.UnitPrice
-                    }).ToList()
-                }).ToList();
+                    CustomerName =
+                        g.First().Order.Customer.FirstName
+                        + " " +
+                        g.First().Order.Customer.LastName,
+
+                    OrderDate =
+                        g.First().Order.OrderDate,
+
+                    TotalAmount =
+                        g.Sum(i =>
+                            i.Quantity * i.UnitPrice),
+
+                    Items = g.Select(i =>
+                        new FarmerOrderItemDto
+                        {
+                            ProductName =
+                                i.Product.Name,
+
+                            Quantity =
+                                i.Quantity,
+
+                            UnitPrice =
+                                i.UnitPrice,
+
+                            LineTotal =
+                                i.Quantity * i.UnitPrice,
+
+                            ImageUrl =
+                                i.Product.Images
+                                    .Select(img => img.ImageUrl)
+                                    .FirstOrDefault()
+                        }).ToList()
+                })
+
+                .OrderByDescending(o => o.OrderDate)
+
+                .ToList();
 
             return grouped;
         }
@@ -159,6 +191,18 @@ namespace Backend.Services.Implementations
             if (cart == null || !cart.CartItems.Any())
                 throw new Exception("Cart is empty");
 
+            // check stock availability
+            foreach (var item in cart.CartItems)
+            {
+                if (item.Product.Quantity < item.Quantity)
+                {
+                    throw new Exception(
+                        $"Insufficient stock for {item.Product.Name}. " +
+                        $"Available: {item.Product.Quantity}, requested: {item.Quantity}"
+                    );
+                }
+            }
+
             var order = new Order
             {
                 CustomerId = userId,
@@ -167,6 +211,7 @@ namespace Backend.Services.Implementations
                 OrderItems = new List<OrderItem>()
             };
 
+            // calculate total and create order items
             foreach (var item in cart.CartItems)
             {
                 order.OrderItems.Add(new OrderItem
@@ -175,8 +220,11 @@ namespace Backend.Services.Implementations
                     Quantity = item.Quantity,
                     UnitPrice = item.Product.Price,
                     UnitOfMeasurement = item.Product.UnitOfMeasurement,
-                    ImageUrl = item.Product.Images?.FirstOrDefault().ImageUrl
+                    ImageUrl = item.Product.Images?.FirstOrDefault()?.ImageUrl
                 });
+
+                // reduce stock
+                item.Product.Quantity -= item.Quantity;
             }
 
             _context.Orders.Add(order);

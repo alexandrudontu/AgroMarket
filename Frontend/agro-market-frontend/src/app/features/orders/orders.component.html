@@ -1,19 +1,14 @@
 <div class="orders-page">
 
-  <!-- HEADER -->
   <div class="orders-header">
 
-    <div>
+    <h1>
+      Comenzile mele
+    </h1>
 
-      <h1>
-        Comenzile mele
-      </h1>
-
-      <p>
-        Urmărește achizițiile și istoricul comenzilor
-      </p>
-
-    </div>
+    <p>
+      Istoricul cumpărăturilor
+    </p>
 
   </div>
 
@@ -29,17 +24,6 @@
       Nu există comenzi încă
     </h3>
 
-    <p>
-      Achizițiile finalizate vor apărea aici
-    </p>
-
-    <a routerLink="/"
-       class="shop-btn">
-
-      Începe cumpărăturile
-
-    </a>
-
   </div>
 
   <!-- ORDERS -->
@@ -47,105 +31,119 @@
 
     <div class="order-card"
 
-         *ngFor="let o of orders">
+         *ngFor="let o of orders"
 
-      <!-- TOP -->
-      <div class="order-top">
+         (click)="toggleOrder(o.orderId)">
 
+      <!-- SUMMARY -->
+      <div class="order-summary">
+
+        <!-- LEFT -->
         <div>
 
-          <h3>
+          <h4>
 
-            Comanda Nr. {{ o.orderId }}
+            Comanda Nr. #{{ o.orderId }}
 
-          </h3>
+          </h4>
 
-          <p class="order-date">
+          <p>
 
-            {{ o.orderDate | date: 'dd/MM/yyyy - HH:mm' : 'UTC+6' }}
+            {{ o.orderDate | date:'dd MM yyyy - HH:mm' : 'UTC+6' }}
 
           </p>
 
         </div>
 
-        <!-- STATUS -->
-        <div class="status-badge"
-             [ngClass]="{
-               'completed': o.status === 'Completed',
-               'pending': o.status === 'Pending',
-               'cancelled': o.status === 'Cancelled'
-             }">
+        <!-- CENTER -->
+        <div class="summary-middle">
 
-          {{ o.status }}
-
-        </div>
-
-      </div>
-
-      <!-- ITEMS -->
-      <div class="order-items">
-
-        <div class="order-item"
-
-             *ngFor="let item of o.items">
-
-          <!-- IMAGE -->
-          <img [src]="item.imageUrl
-               ? 'https://localhost:7183' + item.imageUrl
-               : 'https://placehold.co/200x200?text=No+Image'">
-
-          <!-- INFO -->
-          <div class="item-info">
-
-            <h5>
-
-              {{ item.productName }}
-
-            </h5>
-
-            <p>
-
-              {{ item.quantity }} {{ item.unitOfMeasurement }}
-              ×
-              {{ item.unitPrice }} RON
-
-            </p>
-
-          </div>
-
-          <!-- TOTAL -->
-          <div class="item-total">
-
-            {{ item.lineTotal }} RON
-
-          </div>
-
-        </div>
-
-      </div>
-
-      <!-- FOOTER -->
-      <div class="order-footer">
-
-        <div>
-
-          <span class="products-count">
+          <span class="items-count">
 
             {{ o.items.length }}
             produse
 
           </span>
 
+          <span class="status-badge"
+                [ngClass]="{
+                  'completed': o.status === 'Completed',
+                  'pending': o.status === 'Pending',
+                  'cancelled': o.status === 'Cancelled'
+                }">
+
+            {{ o.status }}
+
+          </span>
+
         </div>
 
-        <div class="order-total">
+        <!-- RIGHT -->
+        <div class="summary-right">
 
-          Total:
-          <span>
+          <h3>
 
             {{ o.totalAmount }} RON
 
-          </span>
+          </h3>
+
+          <div class="expand-icon">
+
+            {{ expandedOrderId === o.orderId ? '▲' : '▼' }}
+
+          </div>
+
+        </div>
+
+      </div>
+
+      <!-- EXPANDED -->
+      <div [@expandAnimation]="
+             expandedOrderId === o.orderId
+             ? 'expanded'
+             : 'collapsed'
+           "
+
+           class="expanded-content">
+
+        <div class="products-list">
+
+          <div class="product-row"
+
+               *ngFor="let item of o.items">
+
+            <!-- IMAGE -->
+            <img [src]="item.imageUrl
+                 ? 'https://localhost:7183' + item.imageUrl
+                 : 'https://placehold.co/200x200?text=No+Image'">
+
+            <!-- INFO -->
+            <div class="product-info">
+
+              <h5>
+
+                {{ item.productName }}
+
+              </h5>
+
+              <p>
+
+                {{ item.quantity }} {{ item.unitOfMeasurement }}
+                ×
+                {{ item.unitPrice }} RON
+
+              </p>
+
+            </div>
+
+            <!-- TOTAL -->
+            <div class="product-total">
+
+              {{ item.lineTotal }} RON
+
+            </div>
+
+          </div>
 
         </div>
 

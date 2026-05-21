@@ -9,5 +9,7 @@
         public DateTime OrderDate { get; set; }
 
         public List<FarmerOrderItemDto> Items { get; set; }
+
+        public decimal TotalAmount { get; set; }
     }
 }

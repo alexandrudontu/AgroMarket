@@ -14,5 +14,7 @@ namespace Backend.Services.Interfaces
         Task<ProductImageDto> UploadImageAsync(AddProductImageDto dto);
         Task DeleteImageAsync(int imageId);
         Task SetMainImageAsync(int imageId);
+        Task<List<ProductListDto>> GetNearbyProductsAsync(double userLat, double userLng, double maxDistanceKm,
+            int? categoryId, decimal? minPrice, decimal? maxPrice);
     }
 }

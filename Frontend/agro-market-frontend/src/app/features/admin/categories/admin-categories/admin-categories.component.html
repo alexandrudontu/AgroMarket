@@ -1,39 +1,86 @@
-<h2 class="mb-4 fw-bold">
-  Gestionează Categoriile
-</h2>
+<div class="admin-categories-page">
 
-<!-- ADD CATEGORY -->
-<div class="card shadow-sm border-0 rounded-4 p-3 mb-5">
+  <!-- HEADER -->
+  <div class="page-header">
 
-  <div class="d-flex gap-2">
-
-    <input class="form-control form-control-lg" [(ngModel)]="newCategory" placeholder="Categorie nouă" />
-
-    <button class="btn btn-success px-4" (click)="add()">
-      Adaugă
-    </button>
+    <div>
+      <h1>Gestionează Categoriile</h1>
+    </div>
 
   </div>
 
-</div>
+  <!-- CREATE FORM -->
+  <div class="create-card">
 
-<!-- CATEGORIES GRID -->
-<div class="categories-grid">
+    <div class="form-header">
+      <h3>Adaugă Categorie Nouă</h3>
+      <p>Alege un nume și un icon pentru categorie</p>
+    </div>
 
-  <div class="category-card" *ngFor="let c of categories" [routerLink]="['/categories', c.id]">
+    <div class="create-form">
 
-    <div class="category-content">
+      <div class="form-group category-name-group">
+        <label>Nume Categorie</label>
 
-      <!-- NAME -->
-      <h5 class="mb-0">
-        {{ c.name }}
-      </h5>
+        <input class="modern-input"
+               [(ngModel)]="newCategory"
+               placeholder="Example: Fructe" />
+      </div>
 
-      <p class="products-count mb-0 mt-2">
-        {{ c.productsCount }} produse
-      </p>
+      <div class="form-group">
+        <label>Icon</label>
+
+        <input class="modern-input icon-input"
+       [(ngModel)]="newCategoryIcon"
+       maxlength="4"/>
+
+      </div>
+
+      <button class="add-btn"
+              (click)="add()">
+
+        Adaugă
+
+      </button>
 
     </div>
+
+  </div>
+
+  <!-- CATEGORIES GRID -->
+  <div class="categories-grid">
+
+    <a class="category-card"
+       *ngFor="let c of categories"
+       [routerLink]="['/categories', c.id]">
+
+      <div class="card-bg-circle"></div>
+
+      <div class="category-top">
+
+        <div class="category-icon">
+          {{ c.icon || '🛒' }}
+        </div>
+
+        <div class="products-count">
+          {{ c.productsCount || 0 }} produse
+        </div>
+
+      </div>
+
+      <div class="category-content">
+
+        <h3>
+          {{ c.name }}
+        </h3>
+
+        <p>
+          Click pentru a vedea produsele din această categorie
+        </p>
+
+      </div>
+
+    </a>
 
   </div>
 

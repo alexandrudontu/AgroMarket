@@ -1,0 +1,111 @@
+<div class="location-page">
+
+  <div class="location-card">
+
+    <div class="location-header">
+      <h2>Locația fermei</h2>
+      <p>
+        Alege județul și localitatea sau folosește locația curentă pentru a fi mai ușor de descoperit de clienți.
+      </p>
+    </div>
+
+    <div class="location-form">
+
+      <div class="form-group">
+        <label>Județ</label>
+
+        <select class="location-select"
+                [(ngModel)]="location.county"
+                (change)="onCountyChange()">
+
+          <option value="">
+            Selectează județul
+          </option>
+
+          <option *ngFor="let county of counties"
+                  [value]="county">
+            {{ county }}
+          </option>
+
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label>Localitate</label>
+
+        <select class="location-select"
+                [(ngModel)]="location.city"
+                (change)="onCityChange()"
+                [disabled]="!location.county">
+
+          <option value="">
+            Selectează localitatea
+          </option>
+
+          <option *ngFor="let city of getAvailableCities()"
+                  [value]="city">
+            {{ city }}
+          </option>
+
+        </select>
+      </div>
+
+      <div class="form-group full-width">
+        <label>Adresă / zonă</label>
+
+        <input class="location-input"
+               [(ngModel)]="location.address"
+               placeholder="Ex: Strada Principală, nr. 10" />
+      </div>
+
+      <div class="gps-box">
+
+        <div class="gps-info">
+          <h4>Folosește GPS</h4>
+          <p>
+            Poți permite accesul la locație pentru coordonate mai precise.
+          </p>
+        </div>
+
+        <button class="gps-btn"
+                [disabled]="isLoading"
+                (click)="useCurrentLocation()">
+          📍 Folosește locația curentă
+        </button>
+
+      </div>
+
+      <div class="coordinates-box"
+           *ngIf="hasCoordinates(); else noCoordinates">
+        Coordonate selectate:
+        {{ location.latitude | number:'1.4-4' }},
+        {{ location.longitude | number:'1.4-4' }}
+      </div>
+
+      <ng-template #noCoordinates>
+        <div class="coordinates-box empty">
+          Nu ai coordonate GPS selectate. Dacă salvezi doar județul și localitatea, coordonatele vor fi calculate automat.
+        </div>
+      </ng-template>
+
+      <div class="location-actions">
+
+        <button class="save-btn"
+                [disabled]="isLoading"
+                (click)="saveLocation()">
+          Salvează locația
+        </button>
+
+        <button class="reset-btn"
+                [disabled]="isLoading"
+                (click)="resetLocation()">
+          Resetează
+        </button>
+
+      </div>
+
+    </div>
+
+  </div>
+
+</div>

@@ -16,6 +16,10 @@ namespace Backend.DTOs.Products
         public decimal Quantity { get; set; }
         public int CategoryId { get; set; }
         public string FarmerName { get; set; }
+        public string FarmerId { get; set; }
+        public double? DistanceKm { get; set; }
+        public string? FarmerCity { get; set; }
+        public string? FarmerCounty { get; set; }
         public List<ProductImageDto> ?ProductImages { get; set; }
     }
 }

@@ -22,6 +22,7 @@ namespace Backend.Services.Implementations
                 {
                     Id = c.Id,
                     Name = c.Name,
+                    Icon = c.Icon,
                     ProductsCount = c.Products.Count
                 })
                 .ToListAsync();
@@ -33,7 +34,8 @@ namespace Backend.Services.Implementations
                 .Select(c => new CategoryDto
                 {
                     Id = c.Id,
-                    Name = c.Name
+                    Name = c.Name,
+                    Icon = c.Icon,
                 })
                 .FirstOrDefaultAsync() ?? throw new KeyNotFoundException("Category not found");
         }
@@ -51,7 +53,8 @@ namespace Backend.Services.Implementations
             return new CategoryDto
             {
                 Id = category.Id,
-                Name = category.Name
+                Name = category.Name,
+                Icon = category.Icon,
             };
         }
 

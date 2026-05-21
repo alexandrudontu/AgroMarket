@@ -10,6 +10,8 @@ namespace Backend.Models
         [MaxLength(100)]
         public string Name { get; set; }
 
+        public string Icon { get; set; } = "🛒";
+
         // Navigation property for related products
         public ICollection<Product> ? Products { get; set; }
     }

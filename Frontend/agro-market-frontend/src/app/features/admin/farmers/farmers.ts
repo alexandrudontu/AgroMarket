@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FarmersService } from './farmers.service';
 import {CommonModule} from "@angular/common";
 import { ChangeDetectorRef } from '@angular/core';
+import co from '@angular/common/locales/co';
 
 @Component({
   selector: 'farmers',
@@ -19,11 +20,21 @@ export class FarmersComponent implements OnInit {
   ngOnInit() {
     this.service.getAll().subscribe((res: any) => {
       this.farmers = res;
+      console.log(this.farmers);
       this.cdr.detectChanges();
     });
   }
 
   select(farmer: any) {
     this.selected = farmer;
-  }
+
+    this.service
+      .getFarmerOrders(farmer.id)
+      .subscribe((orders: any) => {
+
+        this.selected.orders = orders;
+
+        this.cdr.detectChanges();
+      });
+}
 }

@@ -18,6 +18,7 @@ export class AdminCategoriesComponent implements OnInit {
   categories: any[] = [];
 
   newCategory = '';
+  newCategoryIcon = '🛒';
 
   constructor(private categoryService: CategoriesService, private cdr: ChangeDetectorRef, private toastr: ToastrService) {}
 
@@ -39,13 +40,13 @@ export class AdminCategoriesComponent implements OnInit {
   }
 
   add() {
-
     if (!this.newCategory.trim()) {
       return;
     }
 
     const body = {
-      name: this.newCategory
+      name: this.newCategory,
+      icon: this.newCategoryIcon || '🛒'
     };
 
     this.categoryService.create(body)
@@ -53,12 +54,15 @@ export class AdminCategoriesComponent implements OnInit {
         next: () => {
 
           this.newCategory = '';
-          this.toastr.success('Categorie adăugată cu succes!');
+          this.newCategoryIcon = '🛒';
+
+          this.toastr.success('Categoria a fost creată cu succes!');
+          this.cdr.detectChanges();
           this.loadCategories();
         },
         error: (err) => {
           console.error(err);
-          this.toastr.error('Eroare la adăugarea categoriei.');
+          this.toastr.error('Categoria nu a putut fi creată.');
         }
       });
   }

@@ -5,6 +5,7 @@ using Backend.DTOs.Images;
 using Backend.DTOs.Orders;
 using Backend.DTOs.Products;
 using Backend.Models;
+using Backend.Services.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -19,11 +20,15 @@ namespace Backend.Controllers
     {
         private readonly ApplicationDbContext _context;
         private readonly UserManager<User> _userManager;
+        private readonly IGeocodingService _geocodingService;
+        private readonly ICurrentUserService _currentUser;
 
-        public UsersController(ApplicationDbContext context, UserManager<User> userManager)
+        public UsersController(ApplicationDbContext context, UserManager<User> userManager, IGeocodingService geocodingService, ICurrentUserService currentUserService)
         {
             _context = context; ;
             _userManager = userManager;
+            _geocodingService = geocodingService;
+            _currentUser = currentUserService;
         }
 
         [HttpGet("farmers")]
@@ -159,6 +164,58 @@ namespace Backend.Controllers
                 .ToListAsync();
 
             return Ok(products);
+        }
+
+        [Authorize(Roles = "Farmer")]
+        [HttpPut("farmer/location")]
+        public async Task<IActionResult> UpdateFarmerLocation([FromBody] UpdateFarmerLocationDto dto)
+        {
+            var farmer = await _userManager.FindByIdAsync(
+                _currentUser.UserId
+            );
+
+            if (farmer == null)
+                return NotFound("Fermierul nu a fost găsit.");
+
+            if (string.IsNullOrWhiteSpace(dto.County))
+                return BadRequest("Județul este obligatoriu.");
+
+            if (string.IsNullOrWhiteSpace(dto.City))
+                return BadRequest("Localitatea este obligatorie.");
+
+
+            double? latitude = dto.Latitude;
+            double? longitude = dto.Longitude;
+
+            if (latitude == null || longitude == null)
+            {
+                var coordinates =
+                    await _geocodingService.GetCoordinatesAsync(
+                        dto.County,
+                        dto.City,
+                        dto.Address
+                    );
+
+                if (coordinates == null)
+                {
+                    return BadRequest(
+                        "Nu am putut găsi coordonatele pentru această locație."
+                    );
+                }
+
+                latitude = coordinates.Value.Latitude;
+                longitude = coordinates.Value.Longitude;
+            }
+
+            farmer.County = dto.County;
+            farmer.City = dto.City;
+            farmer.Address = dto.Address;
+            farmer.Latitude = latitude;
+            farmer.Longitude = longitude;
+
+            await _userManager.UpdateAsync(farmer);
+
+            return NoContent();
         }
     }
 }

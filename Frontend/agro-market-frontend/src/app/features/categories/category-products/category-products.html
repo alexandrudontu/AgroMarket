@@ -25,11 +25,7 @@
           Pret Minim
         </label>
 
-        <input type="number"
-               min="0"
-               class="modern-input"
-               placeholder="0"
-               [(ngModel)]="minPrice" />
+        <input type="number" min="0" class="modern-input" placeholder="0" [(ngModel)]="minPrice" />
 
       </div>
 
@@ -40,19 +36,22 @@
           Pret Maxim
         </label>
 
-        <input type="number"
-               min="1"
-               class="modern-input"
-               placeholder="1000"
-               [(ngModel)]="maxPrice" />
+        <input type="number" min="1" class="modern-input" placeholder="1000" [(ngModel)]="maxPrice" />
 
       </div>
+
+      <button class="btn btn-success mb-3" (click)="useMyLocation()">
+        📍 Folosește locația mea
+      </button>
+
+      <button class="btn btn-outline-secondary mb-3" *ngIf="useLocationFilter" (click)="clearLocationFilter()">
+        Elimină filtrul de locație
+      </button>
 
       <!-- BUTTON -->
       <div class="filter-btn-wrapper">
 
-        <button class="apply-btn"
-                (click)="applyFilters()">
+        <button class="apply-btn" (click)="applyFilters()">
 
           Aplică Filtre
 
@@ -65,8 +64,7 @@
   </div>
 
   <!-- EMPTY -->
-  <div *ngIf="!products.length"
-       class="empty-state">
+  <div *ngIf="!products.length" class="empty-state">
 
     <div class="empty-icon">
       📦
@@ -85,17 +83,12 @@
   <!-- PRODUCTS -->
   <div class="products-grid">
 
-    <a class="product-card"
-
-       *ngFor="let p of products"
-
-       [routerLink]="['/products', p.id]">
+    <a class="product-card" *ngFor="let p of products" [routerLink]="['/products', p.id]">
 
       <!-- IMAGE -->
       <div class="image-wrapper">
 
-        <img *ngIf="p.productImages?.length"
-             [src]="'https://localhost:7183' + p.productImages[0].imageUrl">
+        <img *ngIf="p.productImages?.length" [src]="'https://localhost:7183' + p.productImages[0].imageUrl">
 
         <!-- CATEGORY -->
         <span class="category-badge">
@@ -115,17 +108,21 @@
 
         </h5>
 
+        <p class="distance" *ngIf="p.distanceKm != null">
+          📍 {{ p.distanceKm }} km distanță
+        </p>
+
         <span class="stock-badge" [ngClass]="{
           'stock-high': p.quantity > 20,
           'stock-medium': p.quantity > 0 && p.quantity <= 20,
           'stock-low': p.quantity === 0
         }">
 
-                {{ p.quantity === 0
-                ? 'Stoc epuizat'
-                : p.quantity + ' în stoc' }}
+          {{ p.quantity === 0
+          ? 'Stoc epuizat'
+          : p.quantity + ' în stoc' }}
 
-              </span>
+        </span>
 
         <!-- FOOTER -->
         <div class="product-footer">

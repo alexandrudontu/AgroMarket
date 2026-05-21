@@ -50,6 +50,13 @@ namespace Backend
             builder.Services.AddScoped<ICartService, CartService>();
 
 
+            builder.Services.AddHttpClient<IGeocodingService, GeocodingService>(
+                client =>
+                {
+                    client.DefaultRequestHeaders.UserAgent.ParseAdd("AgroMarket/1.0");
+                });
+
+
             builder.Services.AddIdentity<User, IdentityRole>(options =>
             {
                 options.Password.RequireDigit = false;

@@ -60,9 +60,42 @@ export class ProductsService {
       formData
     );
   }
+
   deleteImage(id: number) {
     return this.http.delete(
       `${this.baseUrl}/images/${id}`
+    );
+  }
+
+  getNearbyProducts(
+    latitude: number,
+    longitude: number,
+    maxDistanceKm: number = 5000,
+    categoryId?: number,
+    minPrice?: number,
+    maxPrice?: number
+  ) {
+    const params: any = {
+      latitude: latitude,
+      longitude: longitude,
+      maxDistanceKm: maxDistanceKm
+    };
+  
+    if (categoryId != null) {
+      params.categoryId = categoryId;
+    }
+  
+    if (minPrice != null) {
+      params.minPrice = minPrice;
+    }
+  
+    if (maxPrice != null) {
+      params.maxPrice = maxPrice;
+    }
+  
+    return this.http.get<any[]>(
+      `${this.baseUrl}/nearby`,
+      { params: params }
     );
   }
 }

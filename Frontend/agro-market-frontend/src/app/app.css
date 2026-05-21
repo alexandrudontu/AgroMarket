@@ -1,0 +1,256 @@
+* {
+
+  font-family: 'Montserrat', sans-serif;
+}
+
+body {
+
+  margin: 0;
+
+  background: #f5f7fb;
+}
+
+/* LAYOUT */
+.app-layout {
+
+  display: flex;
+
+  min-height: 100vh;
+}
+
+/* SIDEBAR */
+.sidebar {
+
+  width: 220px;
+
+  background:
+    linear-gradient(
+      180deg,
+      #364861,
+      #0b101b
+    );
+
+  color: white;
+
+  display: flex;
+
+  flex-direction: column;
+
+  justify-content: space-between;
+
+  padding: 24px 14px;
+
+  position: sticky;
+
+  top: 0;
+
+  height: 100vh;
+
+  box-shadow:
+    8px 0 30px rgba(0,0,0,0.08);
+}
+
+/* LOGO */
+.sidebar-logo {
+
+  font-size: 24px;
+
+  font-weight: 800;
+
+  margin-bottom: 40px;
+
+  cursor: pointer;
+}
+
+/* LINKS */
+.sidebar-links {
+
+  display: flex;
+
+  flex-direction: column;
+
+  gap: 10px;
+}
+
+.sidebar-links a {
+
+  display: flex;
+
+  align-items: center;
+
+  gap: 14px;
+
+  padding: 12px 14px;
+
+  border-radius: 18px;
+
+  color: rgba(255,255,255,0.8);
+
+  text-decoration: none;
+
+  font-weight: 600;
+
+  transition: all 0.25s ease;
+}
+
+.sidebar-links a span {
+
+  font-size: 18px;
+}
+
+/* HOVER */
+.sidebar-links a:hover {
+
+  background: rgba(255,255,255,0.08);
+
+  color: white;
+
+  transform: translateX(4px);
+}
+
+/* ACTIVE */
+.active-link {
+
+  background:
+    linear-gradient(
+      135deg,
+      #198754,
+      #20c997
+    );
+
+  color: white !important;
+
+  box-shadow:
+    0 8px 20px rgba(25,135,84,0.3);
+}
+
+/* BOTTOM */
+.sidebar-bottom {
+
+  display: flex;
+
+  flex-direction: column;
+
+  gap: 12px;
+}
+
+/* BUTTONS */
+.sidebar-btn {
+
+  border: none;
+
+  border-radius: 18px;
+
+  padding: 14px;
+
+  font-weight: 700;
+
+  cursor: pointer;
+
+  transition: all 0.25s ease;
+
+  text-decoration: none;
+
+  text-align: center;
+}
+
+.sidebar-btn:hover {
+
+  transform: translateY(-2px);
+}
+
+/* LOGIN */
+.login-btn {
+
+  background: transparent;
+
+  border: 2px solid rgba(255,255,255,0.2);
+
+  color: white;
+}
+
+/* REGISTER */
+.register-btn {
+
+  background:
+    linear-gradient(
+      135deg,
+      #198754,
+      #20c997
+    );
+
+  color: white;
+}
+
+/* LOGOUT */
+.logout-btn {
+
+  background:
+    linear-gradient(
+      135deg,
+      #dc3545,
+      #ff5b6b
+    );
+
+  color: white;
+}
+
+/* CONTENT */
+.main-content {
+
+  flex: 1;
+
+  padding: 28px;
+
+  overflow-x: hidden;
+}
+
+/* MOBILE */
+@media (max-width: 992px) {
+
+  .sidebar {
+
+    width: 90px;
+
+    padding: 20px 12px;
+  }
+
+  .sidebar-logo {
+
+    font-size: 18px;
+
+    text-align: center;
+  }
+
+  .sidebar-links a {
+
+    justify-content: center;
+  }
+
+  .sidebar-links a span {
+
+    margin: 0;
+  }
+
+  .sidebar-links a {
+
+    font-size: 0;
+  }
+
+  .sidebar-links a span {
+
+    font-size: 22px;
+  }
+
+  .sidebar-btn {
+
+    font-size: 12px;
+
+    padding: 10px;
+  }
+
+  .main-content {
+
+    padding: 20px;
+  }
+}

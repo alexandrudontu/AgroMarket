@@ -22,11 +22,11 @@ namespace Backend.Controllers
             => Ok(await _service.CreateOrderAsync(dto));
 
 
-        [Authorize(Roles = "Farmer")]
-        [HttpGet("farmer")]
-        public async Task<IActionResult> GetFarmerOrders()
+        [Authorize(Roles = "Farmer, Admin")]
+        [HttpGet("farmer/{farmerId}")]
+        public async Task<IActionResult> GetFarmerOrders(string farmerId)
         {
-            return Ok(await _service.GetFarmerOrdersAsync());
+            return Ok(await _service.GetFarmerOrdersAsync(farmerId));
         }
 
         [Authorize(Roles = "Customer")]

@@ -12,6 +12,7 @@ import { roleGuard } from './core/guards/role-guard';
 import { CategoriesListComponent } from './features/categories/categories-list';
 import { CategoryProductsComponent } from './features/categories/category-products/category-products';
 import { AdminCategoriesComponent } from './features/admin/categories/admin-categories/admin-categories.component';
+import { FarmerLocationComponent } from './features/farmer/farmer-location/farmer-location.component';
 
 export const routes: Routes = [
         { path: '', component: HomeComponent },
@@ -31,6 +32,12 @@ export const routes: Routes = [
         {
           path: 'farmer',
           component: FarmerDashboardComponent,
+          canActivate: [authGuard, roleGuard],
+          data: { roles: ['Farmer'] }
+        },
+        {
+          path: 'farmer/location',
+          component: FarmerLocationComponent,
           canActivate: [authGuard, roleGuard],
           data: { roles: ['Farmer'] }
         },

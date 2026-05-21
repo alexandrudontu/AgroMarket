@@ -91,5 +91,26 @@ namespace Backend.Controllers
             await _service.SetMainImageAsync(id);
             return NoContent();
         }
+
+        [HttpGet("nearby")]
+        public async Task<IActionResult> GetNearbyProducts(
+            [FromQuery] double latitude,
+            [FromQuery] double longitude,
+            [FromQuery] double maxDistanceKm = 50,
+            [FromQuery] int? categoryId = null,
+            [FromQuery] decimal? minPrice = null,
+            [FromQuery] decimal? maxPrice = null)
+        {
+            var products = await _service.GetNearbyProductsAsync(
+                latitude,
+                longitude,
+                maxDistanceKm,
+                categoryId,
+                minPrice,
+                maxPrice
+            );
+
+            return Ok(products);
+        }
     }
 }
