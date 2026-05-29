@@ -13,6 +13,8 @@ import { CategoriesListComponent } from './features/categories/categories-list';
 import { CategoryProductsComponent } from './features/categories/category-products/category-products';
 import { AdminCategoriesComponent } from './features/admin/categories/admin-categories/admin-categories.component';
 import { FarmerLocationComponent } from './features/farmer/farmer-location/farmer-location.component';
+import { FarmersNearbyComponent } from './features/farmers-public/farmers-nearby/farmers-nearby.component';
+import { FarmerProfileComponent } from './features/farmers-public/farmer-profile/farmer-profile.component';
 
 export const routes: Routes = [
         { path: '', component: HomeComponent },
@@ -58,5 +60,13 @@ export const routes: Routes = [
           component: AdminCategoriesComponent,
           canActivate: [authGuard, roleGuard],
           data: { roles: ['Admin'] }
+        },
+        {
+          path: 'farmers-nearby',
+          component: FarmersNearbyComponent
+        },
+        {
+          path: 'farmers/:id',
+          component: FarmerProfileComponent
         }
 ];

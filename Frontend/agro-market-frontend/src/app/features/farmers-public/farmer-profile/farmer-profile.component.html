@@ -1,0 +1,125 @@
+<div class="profile-page"
+     *ngIf="farmer">
+
+  <div class="profile-header">
+
+    <div class="profile-avatar">
+      👨‍🌾
+    </div>
+
+    <div>
+
+      <h1>
+        {{ farmer.firstName }} {{ farmer.lastName }}
+      </h1>
+
+      <p>
+        📍 {{ farmer.city || 'Localitate necunoscută' }},
+        {{ farmer.county || 'Județ necunoscut' }}
+      </p>
+
+      <p *ngIf="farmer.distanceKm != null"
+         class="distance">
+        {{ farmer.distanceKm }} km distanță
+      </p>
+
+    </div>
+
+  </div>
+
+  <div class="stats-grid">
+
+    <div class="stat-card">
+      <h3>{{ farmer.productsCount }}</h3>
+      <p>Produse disponibile</p>
+    </div>
+
+    <div class="stat-card">
+      <h3>{{ farmer.soldProductsCount }}</h3>
+      <p>Produse vândute</p>
+    </div>
+
+    <div class="stat-card">
+      <h3>{{ farmer.totalRevenue }} RON</h3>
+      <p>Valoare produse vândute</p>
+    </div>
+
+  </div>
+
+  <div class="info-card">
+
+    <h3>Date fermier</h3>
+
+    <p>
+      <strong>Email:</strong>
+      {{ farmer.email }}
+    </p>
+
+    <p>
+      <strong>Adresă/Zonă:</strong>
+      {{ farmer.address || 'Nespecificată' }}
+    </p>
+
+  </div>
+
+  <div class="products-section">
+
+    <h2>Produse vândute de acest fermier</h2>
+
+    <div class="products-grid">
+
+      <a class="product-card"
+         *ngFor="let p of farmer.products"
+         [routerLink]="['/products', p.id]">
+
+        <div class="image-wrapper">
+
+          <img *ngIf="getMainImage(p)"
+               [src]="getMainImage(p)" />
+
+          <div *ngIf="!getMainImage(p)"
+               class="no-image">
+            🛒
+          </div>
+
+          <span class="category-badge">
+            {{ p.categoryName || 'Fără categorie' }}
+          </span>
+
+        </div>
+
+        <div class="product-content">
+
+          <h4>
+            {{ p.name }}
+          </h4>
+
+          <p class="description">
+            {{ p.description || 'Fără descriere' }}
+          </p>
+
+          <div class="product-meta">
+
+            <span>
+              {{ p.quantity }} {{ p.unitOfMeasurement }} în stoc
+            </span>
+
+            <span>
+              {{ p.soldQuantity }} vândute
+            </span>
+
+          </div>
+
+          <div class="price">
+            {{ p.price }} RON / {{ p.unitOfMeasurement }}
+          </div>
+
+        </div>
+
+      </a>
+
+    </div>
+
+  </div>
+
+</div>

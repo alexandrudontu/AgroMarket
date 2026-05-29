@@ -2,7 +2,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 
 <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;800&display=swap"
-      rel="stylesheet">
+    rel="stylesheet">
 
 <div class="app-layout">
 
@@ -10,10 +10,9 @@
     <aside class="sidebar">
 
         <!-- LOGO -->
-        <div class="sidebar-logo"
-             routerLink="/">
+        <div class="sidebar-logo" routerLink="/">
 
-             AgroMarket
+            AgroMarket
 
         </div>
 
@@ -21,9 +20,7 @@
         <div class="sidebar-links">
 
             <!-- HOME -->
-            <a routerLink="/"
-               routerLinkActive="active-link"
-               [routerLinkActiveOptions]="{ exact: true }">
+            <a routerLink="/" routerLinkActive="active-link" [routerLinkActiveOptions]="{ exact: true }">
 
                 <span>🔎</span>
                 Explorează
@@ -33,24 +30,25 @@
             <!-- CUSTOMER -->
             <ng-container *ngIf="authService.getUserRole() === 'Customer'">
 
-                <a routerLink="/categories"
-                   routerLinkActive="active-link">
+                <a routerLink="/categories" routerLinkActive="active-link">
 
                     <span>📚</span>
                     Categorii
 
                 </a>
 
-                <a routerLink="/cart"
-                   routerLinkActive="active-link">
+                <a routerLink="/farmers-nearby" routerLinkActive="active">
+                    👨‍🌾 Fermieri locali
+                </a>
+
+                <a routerLink="/cart" routerLinkActive="active-link">
 
                     <span>🛒</span>
                     Coș
 
                 </a>
 
-                <a routerLink="/orders"
-                   routerLinkActive="active-link">
+                <a routerLink="/orders" routerLinkActive="active-link">
 
                     <span>📦</span>
                     Comenzi
@@ -62,16 +60,14 @@
             <!-- FARMER -->
             <ng-container *ngIf="authService.getUserRole() === 'Farmer'">
 
-                <a routerLink="/farmer"
-                   routerLinkActive="active-link">
+                <a routerLink="/farmer" routerLinkActive="active-link">
 
                     <span>🌾</span>
                     Produsele mele
 
                 </a>
 
-                <a routerLink="/farmer/location"
-                   routerLinkActive="active-link">
+                <a routerLink="/farmer/location" routerLinkActive="active-link">
 
                     <span>📍</span>
                     Locația mea
@@ -83,16 +79,14 @@
             <!-- ADMIN -->
             <ng-container *ngIf="authService.getUserRole() === 'Admin'">
 
-                <a routerLink="/admin/categories"
-                   routerLinkActive="active-link">
+                <a routerLink="/admin/categories" routerLinkActive="active-link">
 
                     <span>📂</span>
                     Categorii
 
                 </a>
 
-                <a routerLink="/admin/farmers"
-                   routerLinkActive="active-link">
+                <a routerLink="/admin/farmers" routerLinkActive="active-link">
 
                     <span>👨‍🌾</span>
                     Fermieri
@@ -109,15 +103,13 @@
             <!-- NOT LOGGED -->
             <ng-container *ngIf="!authService.isLoggedIn()">
 
-                <a routerLink="/login"
-                   class="sidebar-btn login-btn">
+                <a routerLink="/login" class="sidebar-btn login-btn">
 
                     Login
 
                 </a>
 
-                <a routerLink="/register"
-                   class="sidebar-btn register-btn">
+                <a routerLink="/register" class="sidebar-btn register-btn">
 
                     Înregistrare
 
@@ -126,9 +118,7 @@
             </ng-container>
 
             <!-- LOGGED -->
-            <button *ngIf="authService.isLoggedIn()"
-                    class="sidebar-btn logout-btn"
-                    (click)="logout()">
+            <button *ngIf="authService.isLoggedIn()" class="sidebar-btn logout-btn" (click)="logout()">
 
                 Logout
 

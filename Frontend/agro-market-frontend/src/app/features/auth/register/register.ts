@@ -28,11 +28,11 @@ export class RegisterComponent {
   register() {
     this.authService.register(this.model).subscribe({
       next: (res: any) => {
-        this.authService.saveToken(res);
-        this.toastr.success('Înregistrare reușită!');
-        this.router.navigateByUrl('/');
+        this.toastr.success('Înregistrare reușită! Te poți autentifica acum.');
+        this.router.navigateByUrl('/login');
       },
-      error: () => {
+      error: (err: any) => {
+        console.error(err);
         this.toastr.error('Înregistrare eșuată.');
       }
     });

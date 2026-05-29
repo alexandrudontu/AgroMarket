@@ -1,0 +1,110 @@
+<div class="farmers-page">
+
+  <div class="farmers-header">
+
+    <div>
+      <h1>Fermieri aproape de tine</h1>
+      <p>
+        Găsește fermieri locali, vezi ce produse vând și cât de aproape sunt de locația ta.
+      </p>
+    </div>
+
+  </div>
+
+  <div class="search-card">
+
+    <div class="distance-control">
+
+      <label>Raza de căutare</label>
+
+      <select class="modern-select"
+              [(ngModel)]="maxDistanceKm">
+
+        <option [ngValue]="10">10 km</option>
+        <option [ngValue]="25">25 km</option>
+        <option [ngValue]="50">50 km</option>
+        <option [ngValue]="100">100 km</option>
+        <option [ngValue]="500">500 km</option>
+
+      </select>
+
+    </div>
+
+    <button class="location-btn"
+            [disabled]="isLoading"
+            (click)="useMyLocation()">
+
+      📍 Folosește locația mea
+
+    </button>
+
+  </div>
+
+  <div *ngIf="isLoading"
+       class="loading-box">
+
+    Se caută fermieri în apropiere...
+
+  </div>
+
+  <div *ngIf="searched && !farmers.length && !isLoading"
+       class="empty-state">
+
+    <div class="empty-icon">👨‍🌾</div>
+
+    <h3>Nu am găsit fermieri în apropiere</h3>
+
+    <p>
+      Încearcă să mărești raza de căutare.
+    </p>
+
+  </div>
+
+  <div class="farmers-grid">
+
+    <a class="farmer-card"
+       *ngFor="let f of farmers"
+       [routerLink]="['/farmers', f.id]"
+       [queryParams]="{
+          lat: latitude,
+          lng: longitude
+       }">
+
+      <div class="farmer-avatar">
+        👨‍🌾
+      </div>
+
+      <div class="farmer-content">
+
+        <h3>
+          {{ f.firstName }} {{ f.lastName }}
+        </h3>
+
+        <p class="location">
+          📍 {{ f.city || 'Localitate necunoscută' }},
+          {{ f.county || 'Județ necunoscut' }}
+        </p>
+
+        <div class="farmer-stats">
+
+          <span>
+            {{ f.productsCount }} produse
+          </span>
+
+          <span>
+            {{ f.soldProductsCount }} vândute
+          </span>
+
+        </div>
+
+        <div class="distance">
+          {{ f.distanceKm }} km distanță
+        </div>
+
+      </div>
+
+    </a>
+
+  </div>
+
+</div>

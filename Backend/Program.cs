@@ -48,6 +48,7 @@ namespace Backend
             builder.Services.AddScoped<IProductService, ProductService>();
             builder.Services.AddScoped<IOrderService, OrderService>();
             builder.Services.AddScoped<ICartService, CartService>();
+            builder.Services.AddScoped<IFarmerService, FarmerService>();
 
 
             builder.Services.AddHttpClient<IGeocodingService, GeocodingService>(
