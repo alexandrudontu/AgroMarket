@@ -8,39 +8,63 @@
       <!-- MAIN IMAGE -->
       <div class="main-image-wrapper">
 
-        <img *ngIf="selectedImage"
-             [src]="'https://localhost:7183' + selectedImage"
-             class="main-image" />
+        <img *ngIf="selectedImage" [src]="'https://localhost:7183' + selectedImage" class="main-image"
+          (click)="openLightbox()" />
+        <div *ngIf="!selectedImage" class="no-main-image">
+          🖼️
+        </div>
+
+        <!-- PREV -->
+        <button *ngIf="product.images?.length > 1" class="image-arrow left-arrow"
+          (click)="prevImage(); $event.stopPropagation()">
+          ‹
+        </button>
+
+        <!-- NEXT -->
+        <button *ngIf="product.images?.length > 1" class="image-arrow right-arrow"
+          (click)="nextImage(); $event.stopPropagation()">
+          ›
+        </button>
+
+        <!-- IMAGE COUNTER -->
+        <div *ngIf="product.images?.length" class="image-counter">
+          {{ currentImageIndex + 1 }} / {{ product.images.length }}
+        </div>
 
         <!-- STOCK BADGE -->
-        <div class="stock-badge"
-             [ngClass]="{
-               'in-stock': product.quantity > 10,
-               'low-stock': product.quantity <= 10 && product.quantity > 0,
-               'out-stock': product.quantity === 0
-             }">
+        <div class="stock-badge" [ngClass]="{
+           'in-stock': product.quantity > 10,
+           'low-stock': product.quantity <= 10 && product.quantity > 0,
+           'out-stock': product.quantity === 0
+         }">
 
           {{
-            product.quantity === 0
-            ? 'Stoc epuizat'
-            : product.quantity + ' în stoc'
+          product.quantity === 0
+          ? 'Stoc epuizat'
+          : product.quantity + ' în stoc'
           }}
 
         </div>
 
       </div>
 
-      <!-- THUMBNAILS -->
-      <div class="thumbnails">
+      <!-- GALLERY -->
+      <div class="gallery-section" *ngIf="product.images?.length">
 
-        <img *ngFor="let img of product.productImages"
-             [src]="'https://localhost:7183' + img.imageUrl"
+        <h4>
+          Galerie produs
+        </h4>
 
-             [class.active-thumb]="selectedImage === img.imageUrl"
+        <div class="gallery-grid">
 
-             (click)="selectedImage = img.imageUrl"
+          <div class="gallery-item" *ngFor="let img of product.images; let i = index"
+            [class.active-gallery-item]="currentImageIndex === i" (click)="selectImage(i)">
 
-             class="thumb-img" />
+            <img [src]="'https://localhost:7183' + img.imageUrl" />
+
+          </div>
+
+        </div>
 
       </div>
 
@@ -56,7 +80,8 @@
 
       </h1>
 
-      <p>Vândut de: {{ product.farmerName }}</p>
+      <p>Vândut de: <a class="farmer-link" [routerLink]="['/farmers', product.farmerId]">{{ product.farmerName }}</a>
+      </p>
 
       <!-- DESCRIPTION -->
       <p class="product-description">
@@ -77,8 +102,7 @@
       </div>
 
       <!-- QUANTITY SELECT -->
-      <div *ngIf="authService.getUserRole() === 'Customer'"
-           class="quantity-section">
+      <div *ngIf="authService.getUserRole() === 'Customer'" class="quantity-section">
 
         <label>
           Cantitate
@@ -103,12 +127,8 @@
       </div>
 
       <!-- ACTION -->
-      <button *ngIf="authService.getUserRole() === 'Customer'"
-              class="add-cart-btn"
-
-              [disabled]="product.quantity === 0"
-
-              (click)="addToCart()">
+      <button *ngIf="authService.getUserRole() === 'Customer'" class="add-cart-btn" [disabled]="product.quantity === 0"
+        (click)="addToCart()">
 
         🛒 Adaugă în coș
 
@@ -116,6 +136,37 @@
 
     </div>
 
+  </div>
+
+</div>
+
+<div class="lightbox"
+     *ngIf="isLightboxOpen"
+     (click)="closeLightbox()">
+
+  <button class="lightbox-close"
+          (click)="closeLightbox(); $event.stopPropagation()">
+    ✕
+  </button>
+
+  <button *ngIf="product.images?.length > 1"
+          class="lightbox-arrow lightbox-left"
+          (click)="prevLightboxImage($event)">
+    ‹
+  </button>
+
+  <img [src]="'https://localhost:7183' + selectedImage"
+       class="lightbox-image"
+       (click)="$event.stopPropagation()" />
+
+  <button *ngIf="product.images?.length > 1"
+          class="lightbox-arrow lightbox-right"
+          (click)="nextLightboxImage($event)">
+    ›
+  </button>
+
+  <div class="lightbox-counter">
+    {{ currentImageIndex + 1 }} / {{ product.images.length }}
   </div>
 
 </div>

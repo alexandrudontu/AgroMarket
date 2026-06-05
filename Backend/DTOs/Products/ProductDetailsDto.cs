@@ -15,8 +15,8 @@ namespace Backend.DTOs.Products
         public string UnitOfMeasurement { get; set; }
         public int CategoryId { get; set; }
         public string CategoryName { get; set; }
-
         public string FarmerName { get; set; }
+        public string FarmerId { get; set; }
         public List<ProductImageDto> Images { get; set; }
     }
 }

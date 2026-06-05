@@ -42,7 +42,7 @@ export class HomeComponent implements OnInit {
 
   loadRecommended() {
     this.productService.getAll().subscribe(res => {
-      this.products = res.slice(0, 10);
+      this.products = res;
       this.cdr.detectChanges();
     });
   }

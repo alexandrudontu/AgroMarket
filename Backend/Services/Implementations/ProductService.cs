@@ -34,7 +34,7 @@ namespace Backend.Services.Implementations
             if (maxPrice.HasValue)
                 query = query.Where(p => p.Price <= maxPrice);
 
-            return await query.Take(10).Select(p => new ProductListDto
+            return await query.Take(20).Select(p => new ProductListDto
             {
                 Id = p.Id,
                 Name = p.Name,
@@ -72,6 +72,7 @@ namespace Backend.Services.Implementations
                 UnitOfMeasurement = product.UnitOfMeasurement,
                 CategoryId = product.CategoryId,
                 CategoryName = product.Category.Name,
+                FarmerId = product.Farmer.Id,
                 FarmerName = product.Farmer.FirstName + " " + product.Farmer.LastName,
                 Images = product.Images
                     .Select(i => new ProductImageDto
