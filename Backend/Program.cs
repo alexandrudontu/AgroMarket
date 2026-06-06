@@ -1,5 +1,6 @@
 using Backend.Data;
 using Backend.Models;
+using CloudinaryDotNet;
 using Backend.Services.Implementations;
 using Backend.Services.Interfaces;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -96,6 +97,31 @@ namespace Backend
                 };
             });
 
+            builder.Services.Configure<CloudinarySettings>(
+    builder.Configuration.GetSection("CloudinarySettings"));
+
+            var cloudinarySettings = builder.Configuration
+                .GetSection("CloudinarySettings")
+                .Get<CloudinarySettings>();
+
+            if (cloudinarySettings == null ||
+                string.IsNullOrWhiteSpace(cloudinarySettings.CloudName) ||
+                string.IsNullOrWhiteSpace(cloudinarySettings.ApiKey) ||
+                string.IsNullOrWhiteSpace(cloudinarySettings.ApiSecret))
+            {
+                throw new Exception("Cloudinary settings are missing.");
+            }
+
+            var account = new Account(
+                cloudinarySettings.CloudName,
+                cloudinarySettings.ApiKey,
+                cloudinarySettings.ApiSecret
+            );
+
+            var cloudinary = new Cloudinary(account);
+
+            builder.Services.AddSingleton(cloudinary);
+
             builder.Services.AddAuthorization();
 
             var app = builder.Build();
@@ -115,8 +141,6 @@ namespace Backend
             }
 
             app.UseHttpsRedirection();
-
-            app.UseStaticFiles();
 
             app.UseCors("Frontend");
 

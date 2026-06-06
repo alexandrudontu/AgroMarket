@@ -221,4 +221,16 @@ export class CategoryProductsComponent implements OnInit {
 
     this.loadProducts();
   }
+
+  getImageUrl(imageUrl: string): string {
+    if (!imageUrl) {
+      return 'https://placehold.co/400x300?text=No+Image';
+    }
+  
+    if (imageUrl.startsWith('http')) {
+      return imageUrl;
+    }
+  
+    return this.apiUrl + imageUrl;
+  }
 }

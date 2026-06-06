@@ -64,14 +64,25 @@ export class HomeComponent implements OnInit {
     this.cdr.detectChanges();
   }
 
-  @HostListener('document:click', ['$event'])
-onClickOutside(event: MouseEvent) {
+  @HostListener('document:click', ['$event']) onClickOutside(event: MouseEvent) {
 
-  if (!this.elRef.nativeElement.contains(event.target)) {
+    if (!this.elRef.nativeElement.contains(event.target)) {
 
-    this.searchResults = [];
+      this.searchResults = [];
 
-    this.cdr.detectChanges();
+      this.cdr.detectChanges();
+    }
   }
-}
+
+  getImageUrl(imageUrl: string): string {
+    if (!imageUrl) {
+      return 'https://placehold.co/400x300?text=No+Image';
+    }
+  
+    if (imageUrl.startsWith('http')) {
+      return imageUrl;
+    }
+  
+    return this.apiUrl + imageUrl;
+  }
 }

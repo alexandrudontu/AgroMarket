@@ -52,9 +52,7 @@
         <!-- IMAGE -->
         <div class="item-image">
 
-          <img [src]="item.imageUrl
-            ? apiUrl + item.imageUrl
-            : 'https://placehold.co/300x300?text=No+Image'">
+          <img [src]="getImageUrl(item.imageUrl)">
 
         </div>
 

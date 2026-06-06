@@ -8,7 +8,7 @@
       <!-- MAIN IMAGE -->
       <div class="main-image-wrapper">
 
-        <img *ngIf="selectedImage" [src]="apiUrl + selectedImage" class="main-image"
+        <img *ngIf="selectedImage" [src]="getImageUrl(selectedImage)" class="main-image"
           (click)="openLightbox()" />
         <div *ngIf="!selectedImage" class="no-main-image">
           🖼️
@@ -60,7 +60,7 @@
           <div class="gallery-item" *ngFor="let img of product.images; let i = index"
             [class.active-gallery-item]="currentImageIndex === i" (click)="selectImage(i)">
 
-            <img [src]="apiUrl + img.imageUrl" />
+            <img [src]="getImageUrl(img.imageUrl)" />
 
           </div>
 

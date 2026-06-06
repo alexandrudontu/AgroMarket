@@ -113,9 +113,7 @@
                *ngFor="let item of o.items">
 
             <!-- IMAGE -->
-            <img [src]="item.imageUrl
-                 ? apiUrl + item.imageUrl
-                 : 'https://placehold.co/200x200?text=No+Image'">
+            <img [src]="getImageUrl(item.imageUrl)">
 
             <!-- INFO -->
             <div class="product-info">

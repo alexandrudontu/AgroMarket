@@ -91,7 +91,7 @@
             <div class="product-card">
 
               <img *ngIf="p.productImages?.length"
-                   [src]="apiUrl + p.productImages[0].imageUrl"
+                   [src]="getImageUrl(p.productImages[0].imageUrl)"
                    class="product-image" />
 
               <div class="p-3">

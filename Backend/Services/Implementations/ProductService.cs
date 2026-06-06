@@ -3,7 +3,8 @@ using Backend.DTOs.Images;
 using Backend.DTOs.Products;
 using Backend.Models;
 using Backend.Services.Interfaces;
-using Microsoft.AspNetCore.Mvc;
+using CloudinaryDotNet;
+using CloudinaryDotNet.Actions;
 using Microsoft.EntityFrameworkCore;
 
 namespace Backend.Services.Implementations
@@ -12,10 +13,13 @@ namespace Backend.Services.Implementations
     {
         private readonly ApplicationDbContext _context;
         private readonly ICurrentUserService _currentUser;
-        public ProductService(ApplicationDbContext context, ICurrentUserService currentUser)
+        private readonly Cloudinary _cloudinary;
+
+        public ProductService(ApplicationDbContext context, ICurrentUserService currentUser, Cloudinary cloudinary)
         {
             _context = context;
             _currentUser = currentUser;
+            _cloudinary = cloudinary;
         }
         public async Task<List<ProductListDto>> GetProductsAsync(string? search, int? categoryId, decimal? minPrice, decimal? maxPrice)
         {
@@ -169,34 +173,40 @@ namespace Backend.Services.Implementations
         public async Task<ProductImageDto> UploadImageAsync(AddProductImageDto dto)
         {
             var product = await _context.Products
-                .FindAsync(dto.ProductId);
+                .FirstOrDefaultAsync(p => p.Id == dto.ProductId);
 
+            if (product == null)
+                throw new Exception("Product not found");
 
-            // folder
-            var folderPath = Path.Combine(
-                Directory.GetCurrentDirectory(),
-                "wwwroot/Images");
+            if (product.FarmerId != _currentUser.UserId)
+                throw new UnauthorizedAccessException("You can only upload images for your own products");
 
-            if (!Directory.Exists(folderPath))
-                Directory.CreateDirectory(folderPath);
+            if (dto.File == null || dto.File.Length == 0)
+                throw new Exception("Invalid image file");
 
-            // unique filename
-            var fileName = Guid.NewGuid() +
-                           Path.GetExtension(dto.File.FileName);
+            await using var stream = dto.File.OpenReadStream();
 
-            var filePath = Path.Combine(folderPath, fileName);
-
-            // save file
-            using (var stream = new FileStream(filePath, FileMode.Create))
+            var uploadParams = new ImageUploadParams
             {
-                await dto.File.CopyToAsync(stream);
+                File = new FileDescription(dto.File.FileName, stream),
+                Folder = "agromarket/products",
+                UseFilename = true,
+                UniqueFilename = true,
+                Overwrite = false
+            };
+
+            var uploadResult = await _cloudinary.UploadAsync(uploadParams);
+
+            if (uploadResult.Error != null)
+            {
+                throw new Exception(uploadResult.Error.Message);
             }
 
-            // save in db
             var image = new ProductImages
             {
-                ProductId = dto.ProductId,
-                ImageUrl = $"/images/{fileName}"
+                ProductId = product.Id,
+                ImageUrl = uploadResult.SecureUrl.ToString(),
+                PublicId = uploadResult.PublicId
             };
 
             _context.ProductImages.Add(image);
@@ -206,16 +216,34 @@ namespace Backend.Services.Implementations
             return new ProductImageDto
             {
                 Id = image.Id,
-                ImageUrl = image.ImageUrl
+                ImageUrl = image.ImageUrl,
+                PublicId = image.PublicId
             };
         }
 
         public async Task DeleteImageAsync(int imageId)
         {
-            var image = await _context.ProductImages.FindAsync(imageId);
+            var image = await _context.ProductImages
+                .Include(i => i.Product)
+                .FirstOrDefaultAsync(i => i.Id == imageId);
 
             if (image == null)
                 throw new Exception("Image not found");
+
+            if (image.Product.FarmerId != _currentUser.UserId)
+                throw new UnauthorizedAccessException("You can only delete images from your own products");
+
+            if (!string.IsNullOrWhiteSpace(image.PublicId))
+            {
+                var deleteParams = new DeletionParams(image.PublicId);
+
+                var result = await _cloudinary.DestroyAsync(deleteParams);
+
+                if (result.Error != null)
+                {
+                    throw new Exception(result.Error.Message);
+                }
+            }
 
             _context.ProductImages.Remove(image);
 

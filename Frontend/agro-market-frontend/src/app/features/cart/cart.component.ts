@@ -89,4 +89,16 @@ export class CartComponent implements OnInit {
       this.loadCart();
     });
   }
+
+  getImageUrl(imageUrl: string): string {
+    if (!imageUrl) {
+      return 'https://placehold.co/400x300?text=No+Image';
+    }
+  
+    if (imageUrl.startsWith('http')) {
+      return imageUrl;
+    }
+  
+    return this.apiUrl + imageUrl;
+  }
 }
