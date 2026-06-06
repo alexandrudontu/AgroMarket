@@ -6,7 +6,6 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
-using System;
 using System.Text;
 
 namespace Backend
@@ -17,30 +16,31 @@ namespace Backend
         {
             var builder = WebApplication.CreateBuilder(args);
 
-            // Add services to the container.
-
             builder.Services.AddControllers();
+
+            // CORS
+            var allowedOrigins = builder.Configuration
+                .GetSection("AllowedOrigins")
+                .Get<string[]>() ?? Array.Empty<string>();
 
             builder.Services.AddCors(options =>
             {
                 options.AddPolicy("Frontend", policy =>
                 {
                     policy
-                        .WithOrigins(
-                            "http://localhost:4200",
-                            "https://localhost:4200",
-                            "http://localhost:5221",
-                            "https://localhost:5221",
-                            "http://localhost:7183",
-                            "https://localhost:7183")
+                        .WithOrigins(allowedOrigins)
                         .AllowAnyHeader()
                         .AllowAnyMethod();
                 });
             });
 
+            // Database
             builder.Services.AddDbContext<ApplicationDbContext>(options =>
-                options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+                options.UseSqlServer(
+                    builder.Configuration.GetConnectionString("DefaultConnection")
+                ));
 
+            // Application services
             builder.Services.AddScoped<IAuthService, AuthService>();
             builder.Services.AddHttpContextAccessor();
             builder.Services.AddScoped<ICurrentUserService, CurrentUserService>();
@@ -50,14 +50,14 @@ namespace Backend
             builder.Services.AddScoped<ICartService, CartService>();
             builder.Services.AddScoped<IFarmerService, FarmerService>();
 
-
+            // Geocoding service
             builder.Services.AddHttpClient<IGeocodingService, GeocodingService>(
                 client =>
                 {
                     client.DefaultRequestHeaders.UserAgent.ParseAdd("AgroMarket/1.0");
                 });
 
-
+            // Identity
             builder.Services.AddIdentity<User, IdentityRole>(options =>
             {
                 options.Password.RequireDigit = false;
@@ -67,39 +67,55 @@ namespace Backend
             .AddEntityFrameworkStores<ApplicationDbContext>()
             .AddDefaultTokenProviders();
 
+            // JWT
+            var jwtKey = builder.Configuration["JwtSettings:Key"];
+
+            if (string.IsNullOrWhiteSpace(jwtKey))
+            {
+                throw new Exception("JWT key is missing from configuration.");
+            }
+
             builder.Services.AddAuthentication(options =>
             {
                 options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
                 options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
                 options.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
             })
-                .AddJwtBearer(options =>
+            .AddJwtBearer(options =>
+            {
+                options.TokenValidationParameters = new TokenValidationParameters
                 {
-                    options.TokenValidationParameters = new TokenValidationParameters
-                    {
-                        ValidateIssuer = false,
-                        ValidateAudience = false,
-                        ValidateLifetime = true,
-                        ValidateIssuerSigningKey = true,
-                        IssuerSigningKey =
-                            new SymmetricSecurityKey(
-                                Encoding.UTF8.GetBytes(builder.Configuration["JwtSettings:Key"]))
-                    };
-                });
+                    ValidateIssuer = false,
+                    ValidateAudience = false,
+                    ValidateLifetime = true,
+                    ValidateIssuerSigningKey = true,
+                    IssuerSigningKey =
+                        new SymmetricSecurityKey(
+                            Encoding.UTF8.GetBytes(jwtKey)
+                        )
+                };
+            });
 
             builder.Services.AddAuthorization();
 
             var app = builder.Build();
 
+            // Production error handling
+            if (!app.Environment.IsDevelopment())
+            {
+                app.UseExceptionHandler("/error");
+                app.UseHsts();
+            }
+
+            // Seed roles
             using (var scope = app.Services.CreateScope())
             {
                 var services = scope.ServiceProvider;
                 await Backend.Data.Seed.RoleSeeder.SeedAsync(services);
             }
 
-            // Configure the HTTP request pipeline.
-
             app.UseHttpsRedirection();
+
             app.UseStaticFiles();
 
             app.UseCors("Frontend");

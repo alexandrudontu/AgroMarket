@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { ActivatedRoute, RouterModule } from '@angular/router';
 import { FarmersPublicService } from '../farmers-public.service';
 import { ToastrService } from 'ngx-toastr';
+import { environment } from '../../../../environments/environment';
 
 @Component({
   selector: 'app-farmer-profile',
@@ -15,6 +16,7 @@ export class FarmerProfileComponent implements OnInit {
 
   farmer: any;
   isLoading = false;
+  apiUrl = environment.apiUrl;
 
   latitude?: number;
   longitude?: number;
@@ -73,6 +75,6 @@ export class FarmerProfileComponent implements OnInit {
       return null;
     }
 
-    return 'https://localhost:7183' + product.productImages[0].imageUrl;
+    return this.apiUrl + product.productImages[0].imageUrl;
   }
 }

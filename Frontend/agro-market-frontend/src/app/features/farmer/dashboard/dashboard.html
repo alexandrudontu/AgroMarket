@@ -167,7 +167,7 @@
           <div class="carousel-container" *ngIf="p.productImages?.length">
 
             <!-- IMAGE -->
-            <img [src]="'https://localhost:7183' + getCurrentImage(p)?.imageUrl" class="product-main-image" />
+            <img [src]="apiUrl + getCurrentImage(p)?.imageUrl" class="product-main-image" />
 
             <!-- PREV -->
             <button class="carousel-btn left" (click)="prevImage(p); $event.stopPropagation()">
@@ -246,7 +246,7 @@
             <div class="gallery-item" *ngFor="let img of p.productImages">
 
               <!-- IMAGE -->
-              <img [src]="'https://localhost:7183' + img.imageUrl">
+              <img [src]="apiUrl + img.imageUrl">
 
               <!-- OVERLAY -->
               <div class="image-overlay">

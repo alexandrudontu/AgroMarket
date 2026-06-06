@@ -1,10 +1,11 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { environment } from '../../../../environments/environment';
 
 @Injectable({ providedIn: 'root' })
 export class FarmersService {
 
-  private baseUrl = 'https://localhost:7183/api/users/farmers';
+  private baseUrl = `${environment.apiUrl}/api/users/farmers`;
 
   constructor(private http: HttpClient) {}
 
@@ -18,7 +19,7 @@ export class FarmersService {
 
   getFarmerOrders(farmerId: string) {
     return this.http.get(
-      `https://localhost:7183/api/orders/farmer/${farmerId}`
+      `${environment.apiUrl}/api/orders/farmer/${farmerId}`
     );
   }
 }

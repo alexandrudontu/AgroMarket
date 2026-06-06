@@ -5,6 +5,7 @@ import { CommonModule } from '@angular/common';
 import { ChangeDetectorRef } from '@angular/core';
 import { ToastrService } from 'ngx-toastr';
 import { RouterModule } from '@angular/router';
+import { environment } from '../../../environments/environment';
 
 @Component({
   selector: 'app-cart',
@@ -15,6 +16,7 @@ import { RouterModule } from '@angular/router';
 export class CartComponent implements OnInit {
 
   cart: any;
+  apiUrl = environment.apiUrl;
 
   constructor(
     private cartService: CartService,

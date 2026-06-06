@@ -6,6 +6,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ChangeDetectorRef } from '@angular/core';
 import { ToastrService } from 'ngx-toastr';
+import { environment } from '../../../../environments/environment';
 
 @Component({
   selector: 'app-category-products',
@@ -17,6 +18,7 @@ import { ToastrService } from 'ngx-toastr';
 export class CategoryProductsComponent implements OnInit {
 
   products: any[] = [];
+  apiUrl = environment.apiUrl;
 
   categoryId!: number;
 

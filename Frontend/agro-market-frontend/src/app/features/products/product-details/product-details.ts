@@ -7,6 +7,7 @@ import { CartService } from '../../cart/cart.service';
 import { AuthService } from '../../auth/auth.service';
 import { ChangeDetectorRef } from '@angular/core';
 import { ToastrService } from 'ngx-toastr';
+import { environment } from '../../../../environments/environment';
 
 @Component({
   selector: 'app-product-details',
@@ -21,6 +22,7 @@ export class ProductDetailsComponent implements OnInit {
   selectedImage: string = '';
   currentImageIndex = 0;
   quantity = 1;
+  apiUrl = environment.apiUrl;
 
   constructor(
     private route: ActivatedRoute,
@@ -107,24 +109,24 @@ export class ProductDetailsComponent implements OnInit {
     if (!this.selectedImage) {
       return;
     }
-  
+
     this.isLightboxOpen = true;
   }
-  
+
   closeLightbox() {
     this.isLightboxOpen = false;
   }
-  
+
   openLightboxAt(index: number) {
     this.selectImage(index);
     this.isLightboxOpen = true;
   }
-  
+
   nextLightboxImage(event?: MouseEvent) {
     event?.stopPropagation();
     this.nextImage();
   }
-  
+
   prevLightboxImage(event?: MouseEvent) {
     event?.stopPropagation();
     this.prevImage();

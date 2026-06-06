@@ -11,6 +11,7 @@ import {
   transition,
   animate
 } from '@angular/animations';
+import { environment } from '../../../environments/environment';
 
 @Component({
   selector: 'app-orders',
@@ -42,11 +43,12 @@ export class OrdersComponent implements OnInit {
 
   orders: any[] = [];
   expandedOrderId: number | null = null;
+  apiUrl = environment.apiUrl;
 
   constructor(private http: HttpClient, private cdr: ChangeDetectorRef) {}
 
   ngOnInit() {
-    this.http.get('https://localhost:7183/api/orders/customer')
+    this.http.get(this.apiUrl + '/api/orders/customer')
       .subscribe((res: any) => {
         this.orders = res;
         this.cdr.detectChanges();

@@ -91,7 +91,7 @@
             <div class="product-card">
 
               <img *ngIf="p.productImages?.length"
-                   [src]="'https://localhost:7183' + p.productImages[0].imageUrl"
+                   [src]="apiUrl + p.productImages[0].imageUrl"
                    class="product-image" />
 
               <div class="p-3">

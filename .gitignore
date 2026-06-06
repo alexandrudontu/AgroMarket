@@ -364,3 +364,4 @@ FodyWeavers.xsd
 
 Backend/wwwroot/images/
 Backend/appsettings.json
+Backend/appsettings.Development.json

@@ -12,6 +12,7 @@ import {
   transition,
   animate
 } from '@angular/animations';
+import { environment } from '../../../../environments/environment';
 
 @Component({
   selector: 'app-farmer-dashboard',
@@ -48,6 +49,7 @@ export class FarmerDashboardComponent implements OnInit {
   editingProductId: number | null = null;
   expandedProductId: number | null = null;
   currentImageIndexes: { [key: number]: number } = {};
+  apiUrl = environment.apiUrl;
 
   model: any = {
     name: '',

@@ -2,8 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FarmersService } from './farmers.service';
 import {CommonModule} from "@angular/common";
 import { ChangeDetectorRef } from '@angular/core';
-import co from '@angular/common/locales/co';
-
+import { environment } from '../../../../environments/environment';
 @Component({
   selector: 'farmers',
   templateUrl: './farmers.html',
@@ -14,6 +13,7 @@ export class FarmersComponent implements OnInit {
 
   farmers: any[] = [];
   selected: any;
+  apiUrl = environment.apiUrl;
 
   constructor(private service: FarmersService, private cdr: ChangeDetectorRef) {}
 

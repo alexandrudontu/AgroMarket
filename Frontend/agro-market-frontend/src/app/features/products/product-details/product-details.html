@@ -8,7 +8,7 @@
       <!-- MAIN IMAGE -->
       <div class="main-image-wrapper">
 
-        <img *ngIf="selectedImage" [src]="'https://localhost:7183' + selectedImage" class="main-image"
+        <img *ngIf="selectedImage" [src]="apiUrl + selectedImage" class="main-image"
           (click)="openLightbox()" />
         <div *ngIf="!selectedImage" class="no-main-image">
           🖼️
@@ -60,7 +60,7 @@
           <div class="gallery-item" *ngFor="let img of product.images; let i = index"
             [class.active-gallery-item]="currentImageIndex === i" (click)="selectImage(i)">
 
-            <img [src]="'https://localhost:7183' + img.imageUrl" />
+            <img [src]="apiUrl + img.imageUrl" />
 
           </div>
 
@@ -155,7 +155,7 @@
     ‹
   </button>
 
-  <img [src]="'https://localhost:7183' + selectedImage"
+  <img [src]="apiUrl + selectedImage"
        class="lightbox-image"
        (click)="$event.stopPropagation()" />
 

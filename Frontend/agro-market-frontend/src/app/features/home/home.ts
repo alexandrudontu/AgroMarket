@@ -7,6 +7,7 @@ import { Subject } from 'rxjs/internal/Subject';
 import { debounceTime, switchMap } from 'rxjs/operators';
 import { ChangeDetectorRef } from '@angular/core';
 import { ElementRef, HostListener } from '@angular/core';
+import { environment } from '../../../environments/environment';
 
 @Component({
   selector: 'app-home',
@@ -20,6 +21,7 @@ export class HomeComponent implements OnInit {
   products: any[] = [];
   searchResults: any[] = [];
   search = '';
+  apiUrl = environment.apiUrl;
 
   private searchSubject = new Subject<string>();
 

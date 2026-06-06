@@ -1,19 +1,20 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { environment } from '../../../environments/environment';
 
 @Injectable({
   providedIn: 'root'
 })
 export class FarmersPublicService {
 
-  private baseUrl = 'https://localhost:7183/api/farmers';
+  private baseUrl = `${environment.apiUrl}/api/farmers`;
 
   constructor(private http: HttpClient) {}
 
   getNearbyFarmers(
     latitude: number,
     longitude: number,
-    maxDistanceKm: number = 50
+    maxDistanceKm: number = 500
   ) {
     return this.http.get<any[]>(
       `${this.baseUrl}/nearby`,

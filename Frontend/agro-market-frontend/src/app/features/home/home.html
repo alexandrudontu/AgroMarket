@@ -37,7 +37,7 @@
 
           <!-- IMAGE -->
           <img *ngIf="p.productImages?.length"
-               [src]="'https://localhost:7183' + p.productImages[0]?.imageUrl">
+               [src]="apiUrl + p.productImages[0]?.imageUrl">
 
           <!-- INFO -->
           <div>
@@ -88,7 +88,7 @@
       <div class="image-wrapper">
 
         <img *ngIf="p.productImages?.length"
-             [src]="'https://localhost:7183' + p.productImages[0]?.imageUrl">
+             [src]="apiUrl + p.productImages[0]?.imageUrl">
 
         <!-- CATEGORY -->
         <span class="category-badge">
