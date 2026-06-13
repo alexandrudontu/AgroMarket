@@ -2,7 +2,7 @@
 
   position: relative;
 
-  height: 420px;
+  height: 300px;
 
   border-radius: 32px;
 
@@ -48,16 +48,15 @@
 
   color: white;
 
-  padding: 20px;
 }
 
 .hero-content h1 {
 
-  font-size: 52px;
+  font-size: 42px;
 
   font-weight: 800;
 
-  max-width: 800px;
+  max-width: 1400px;
 
   margin-bottom: 18px;
 }
@@ -75,7 +74,7 @@
 
   width: 100%;
 
-  max-width: 650px;
+  max-width: 850px;
 
   position: relative;
 }
@@ -202,9 +201,9 @@
 
   display: grid;
 
-  grid-template-columns: repeat(4, 1fr);
+  grid-template-columns: repeat(5, 1fr);
 
-  gap: 24px;
+  gap: 20px;
 }
 
 .product-card {
@@ -242,7 +241,7 @@
 
   width: 100%;
 
-  height: 240px;
+  height: 200px;
 
   object-fit: cover;
 }
@@ -286,7 +285,7 @@
 
 .product-content {
 
-  padding: 22px;
+  padding: 18px;
 }
 
 .product-content h5 {
@@ -313,7 +312,7 @@
 
   align-items: center;
 
-  margin-top: 18px;
+  margin-top: 15px;
 }
 
 .price {

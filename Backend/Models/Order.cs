@@ -14,10 +14,10 @@ namespace Backend.Models
         public decimal TotalAmount { get; set; }
 
         // Foreign key to Customer (User)
-        public string CustomerId { get; set; }
+        public string ? CustomerId { get; set; }
 
         // Navigation property
-        public User Customer { get; set; }
+        public User ? Customer { get; set; }
 
         public OrderStatus Status { get; set; } = OrderStatus.Pending;
 

@@ -227,6 +227,8 @@ namespace Backend.Services.Implementations
                 item.Product.Quantity -= item.Quantity;
             }
 
+            order.TotalAmount = order.OrderItems.Sum(i => i.Quantity * i.UnitPrice);
+
             _context.Orders.Add(order);
 
             //Clear cart

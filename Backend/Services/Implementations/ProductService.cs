@@ -260,6 +260,9 @@ namespace Backend.Services.Implementations
             if (image == null)
                 throw new Exception("Image not found");
 
+            if (image.Product.FarmerId != _currentUser.UserId)
+                throw new UnauthorizedAccessException("You can only set main images for your own products");
+
             foreach (var img in image.Product.Images)
             {
                 img.IsMain = false;

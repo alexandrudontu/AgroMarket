@@ -27,9 +27,9 @@ namespace Backend.Services.Implementations
                 })
                 .ToListAsync();
         }
-        public Task<CategoryDto> GetByIdAsync(int id)
+        public async Task<CategoryDto> GetByIdAsync(int id)
         {
-            return _context.Categories
+            var category = await _context.Categories
                 .Where(c => c.Id == id)
                 .Select(c => new CategoryDto
                 {
@@ -37,14 +37,16 @@ namespace Backend.Services.Implementations
                     Name = c.Name,
                     Icon = c.Icon,
                 })
-                .FirstOrDefaultAsync() ?? throw new KeyNotFoundException("Category not found");
+                .FirstOrDefaultAsync(); 
+                return category ?? throw new KeyNotFoundException("Category not found");
         }
 
         public async Task<CategoryDto> CreateAsync(CreateCategoryDto dto)
         {
             var category = new Category
             {
-                Name = dto.Name
+                Name = dto.Name,
+                Icon = dto.Icon,
             };
 
             _context.Categories.Add(category);

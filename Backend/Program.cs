@@ -140,6 +140,8 @@ namespace Backend
                 await Backend.Data.Seed.RoleSeeder.SeedAsync(services);
             }
 
+            app.UseStaticFiles();
+
             app.UseHttpsRedirection();
 
             app.UseCors("Frontend");

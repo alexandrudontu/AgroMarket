@@ -25,16 +25,12 @@ namespace Backend.Controllers
         [Authorize(Roles = "Farmer, Admin")]
         [HttpGet("farmer/{farmerId}")]
         public async Task<IActionResult> GetFarmerOrders(string farmerId)
-        {
-            return Ok(await _service.GetFarmerOrdersAsync(farmerId));
-        }
+            => Ok(await _service.GetFarmerOrdersAsync(farmerId));
 
-        [Authorize(Roles = "Customer")]
+        [Authorize(Roles = "Customer, Admin")]
         [HttpGet("customer")]
         public async Task<IActionResult> GetCustomerOrders()
-        {
-            return Ok(await _service.GetCustomerOrdersAsync());
-        }
+            => Ok(await _service.GetCustomerOrdersAsync());
 
         [Authorize(Roles = "Customer")]
         [HttpPost("checkout")]
